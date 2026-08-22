@@ -594,7 +594,6 @@ h3 {
   width: 100%;
   aspect-ratio: 1786 / 1096;
   object-fit: cover;
-  box-shadow: 10px 10px 0 rgba(248, 61, 126, 0.2);
 }
 
 .editor-figure figcaption {

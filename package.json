@@ -13,7 +13,6 @@
     "preview": "astro preview --host"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.4"
   },
   "devDependencies": {
