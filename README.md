@@ -38,6 +38,9 @@ Cloudflare Workers Static Assets uses `wrangler.jsonc` with `dist` as the
 deployment directory. Build with `npm run build`, then deploy with
 `npx wrangler deploy` or connect the repository through Cloudflare Builds.
 
+After Astro builds, `scripts/package-static.mjs` moves pages, JS, CSS and page
+assets into `dist/app/`. Domain-level SEO files remain at the deployment root.
+
 Route these public paths to the deployed `vicoco-seo` project:
 
 - `/app/*`
@@ -49,8 +52,3 @@ Route `/`, `/editor*`, `/handoff*`, and application assets to `web-squoosh`.
 All SEO content pages must stay under `/app/`. Astro places their JS, CSS
 and public assets under the same prefix, so new SEO pages do not require new
 Cloudflare routes. The public SEO files keep their domain-root URLs.
-
-`/app/` redirects to the primary Squoosh batch compressor page until a
-dedicated SEO directory page replaces it. The wildcard rewrite in `_redirects`
-maps `/app/*` to Astro's matching path inside `dist` without changing the
-public URL.

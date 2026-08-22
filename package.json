@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "astro dev --host",
     "check": "astro check",
-    "build": "npm run check && astro build",
+    "build": "npm run check && astro build && npm run package:static",
+    "package:static": "node scripts/package-static.mjs",
     "preview": "astro preview --host"
   },
   "dependencies": {
