@@ -1,0 +1,371 @@
+---
+interface Props {
+  titleLines: string[];
+  description: string;
+  source: string;
+}
+
+const { titleLines, description, source } = Astro.props;
+---
+
+<section class="hero" id="top" aria-labelledby="page-title" data-upload-root>
+  <div class="container">
+    <input
+      class="file-input"
+      data-file-input
+      type="file"
+      accept="image/*,.svg"
+      multiple
+    />
+    <input
+      class="file-input"
+      data-folder-input
+      type="file"
+      accept="image/*,.svg"
+      multiple
+      webkitdirectory
+    />
+    <div
+      class="upload-stage"
+      data-uploader
+      data-source={source}
+      aria-describedby="upload-status"
+    >
+      <div class="upload-inner">
+        <span class="upload-icon" aria-hidden="true">
+          <svg width="72" height="72" viewBox="8 9 32 30" fill="currentColor">
+            <path d="M25.2486 32.74993c0-3.26666 2.4425-6.13416 5.66541-6.65961.95081-.15503 1.90277-.09332 2.83459.13959v-6.79999c0-1.52002-1.22998-2.75-2.75-2.75h-19c-1.51996 0-2.75 1.22998-2.75 2.75v12c0 1.52002 1.23004 2.75 2.75 2.75h13.40002c-.04999-.22003-.08002-.44-.10999-.66998-.03002-.23004-.04003-.49005-.04003-.76001zm-7.71997-9.19c-.29004-.29004-.77002-.29004-1.06 0l-5.72003 5.71997v-9.84998c0-.69.56-1.25 1.25-1.25h19c.69 0 1.25.56 1.25 1.25v6.19l-5.39001-5.39001c-.28998-.28998-.76996-.28998-1.06 0l-5.79999 5.79999z" />
+            <path d="M38.2486 14.4699c-.41998-.59998-1.04999-1-1.76996-1.13l-18.71002-3.29999c-1.46851-.25903-2.92731.77502-3.19 2.22998l-.51001 2.91003h16.92999c2.34003 0 4.25 1.90997 4.25 4.25v7.40997c.5177.28473 1.05048.65045 1.45001 1.09003l2.01001-11.41003c.13001-.71997-.03998-1.44995-.46002-2.04999z" />
+            <circle cx="19.999" cy="21.09" r=".75" />
+            <path d="M35.3946 28.75481c-.92767-.784-2.1792-1.25488-3.396-1.25488-2.89502 0-5.25 2.35541-5.25 5.24994 0 2.86261 2.38904 5.25006 5.25 5.25006 2.89502 0 5.25-2.35547 5.25-5.25 0-1.54297-.66846-2.99316-1.854-3.99512zm-.86573 4.02088c-.29297.29297-.76758.29297-1.06055 0l-.71973-.71973v3.18945c0 .41406-.33594.75-.75.75s-.75-.33594-.75-.75v-3.18945l-.71973.71973c-.29297.29297-.76758.29297-1.06055 0s-.29297-.76758 0-1.06055l2-2c.28717-.28717.77374-.2868 1.06055 0l2 2c.29298.29297.29298.76758.00001 1.06055z" />
+          </svg>
+        </span>
+        <h1 id="page-title">
+          {
+            titleLines.map((line, index) => (
+              <span class={index ? 'compressor-word' : undefined}>
+                {index ? ` ${line}` : line}
+              </span>
+            ))
+          }
+        </h1>
+        <p class="upload-copy">
+          Drop images or folders here, or{' '}
+          <button
+            class="paste-button"
+            data-paste
+            type="button"
+            aria-label="Paste images from clipboard"
+          >Paste</button>, or click to choose
+        </p>
+        <div class="upload-actions">
+          <button class="upload-action upload-action-primary" data-choose-images type="button">
+            Choose Images
+          </button>
+          <button
+            class="upload-action upload-action-secondary"
+            data-upload-options
+            type="button"
+            aria-label="More upload options"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="folder-upload-menu"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m7 9 5 5 5-5" />
+            </svg>
+          </button>
+          <div class="upload-menu" id="folder-upload-menu" data-folder-menu hidden>
+            <button data-folder type="button">Choose Folder</button>
+          </div>
+        </div>
+      </div>
+      <span class="upload-status" id="upload-status" data-status role="status" aria-live="polite">
+        JPEG, PNG, WebP, AVIF, SVG &amp; more
+      </span>
+    </div>
+    <p class="hero-description">{description}</p>
+  </div>
+</section>
+
+<script>
+  const DATABASE_NAME = 'vicoco-handoff';
+  const STORE_NAME = 'transfers';
+  const TRANSFER_TTL = 60 * 60 * 1000;
+
+  interface LegacyFileEntry {
+    isFile: boolean;
+    isDirectory: boolean;
+    file?: (
+      success: (file: File) => void,
+      failure?: () => void,
+    ) => void;
+    createReader?: () => {
+      readEntries: (
+        success: (entries: LegacyFileEntry[]) => void,
+        failure?: () => void,
+      ) => void;
+    };
+  }
+
+  const uploadRoot = document.querySelector<HTMLElement>('[data-upload-root]');
+  const uploader = uploadRoot?.querySelector<HTMLElement>('[data-uploader]');
+  const fileInput = uploadRoot?.querySelector<HTMLInputElement>('[data-file-input]');
+  const folderInput = uploadRoot?.querySelector<HTMLInputElement>('[data-folder-input]');
+  const chooseButtons = document.querySelectorAll<HTMLButtonElement>('[data-choose-images]');
+  const optionsButton = uploader?.querySelector<HTMLButtonElement>('[data-upload-options]');
+  const folderMenu = uploader?.querySelector<HTMLElement>('[data-folder-menu]');
+  const folderButton = uploader?.querySelector<HTMLButtonElement>('[data-folder]');
+  const pasteButton = uploader?.querySelector<HTMLButtonElement>('[data-paste]');
+  const status = uploader?.querySelector<HTMLElement>('[data-status]');
+  const source = uploader?.dataset.source || 'seo';
+  let dragDepth = 0;
+  if (folderInput) {
+    (folderInput as HTMLInputElement & { webkitdirectory: boolean }).webkitdirectory = true;
+  }
+  const setFolderMenu = (open: boolean) => {
+    if (!folderMenu || !optionsButton || !uploader) return;
+    folderMenu.hidden = !open;
+    optionsButton.setAttribute('aria-expanded', String(open));
+    uploader.dataset.menuOpen = String(open);
+  };
+
+  const setStatus = (message: string, state: 'idle' | 'busy' | 'error' = 'idle') => {
+    if (!status || !uploader) return;
+    status.textContent = message;
+    uploader.dataset.state = state;
+    uploader.setAttribute('aria-busy', String(state === 'busy'));
+    chooseButtons.forEach((button) => {
+      button.disabled = state === 'busy';
+    });
+    if (optionsButton) optionsButton.disabled = state === 'busy';
+    if (folderButton) folderButton.disabled = state === 'busy';
+  };
+
+  const isImage = (file: File) =>
+    file.type.startsWith('image/') || /\.svg$/i.test(file.name);
+
+  const transactionDone = (transaction: IDBTransaction) =>
+    new Promise<void>((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+      transaction.onabort = () => reject(transaction.error);
+    });
+
+  const openDatabase = () =>
+    new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open(DATABASE_NAME, 1);
+      request.onupgradeneeded = () => {
+        if (!request.result.objectStoreNames.contains(STORE_NAME)) {
+          request.result.createObjectStore(STORE_NAME);
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+
+  const saveTransfer = async (files: File[]) => {
+    const database = await openDatabase();
+    try {
+      const id = crypto.randomUUID();
+      const transaction = database.transaction(STORE_NAME, 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const expiresBefore = Date.now() - TRANSFER_TTL;
+      const cursorRequest = store.openCursor();
+      cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;
+        if (!cursor) return;
+        const value = cursor.value as { createdAt?: number };
+        if (!value.createdAt || value.createdAt < expiresBefore) cursor.delete();
+        cursor.continue();
+      };
+      store.put({ createdAt: Date.now(), files }, id);
+      await transactionDone(transaction);
+      return id;
+    } finally {
+      database.close();
+    }
+  };
+
+  const handoff = async (incoming: File[]) => {
+    const files = incoming.filter(isImage);
+    if (files.length === 0) {
+      setStatus('Choose image files only.', 'error');
+      return;
+    }
+
+    setFolderMenu(false);
+    setStatus(`Preparing ${files.length} ${files.length === 1 ? 'image' : 'images'}...`, 'busy');
+    try {
+      const id = await saveTransfer(files);
+      const destination = new URL('/handoff', window.location.origin);
+      destination.searchParams.set('handoff', id);
+      destination.searchParams.set('source', source);
+      window.location.assign(destination);
+    } catch (error) {
+      console.error(error);
+      setStatus('Could not open the editor. Please try again.', 'error');
+    }
+  };
+
+  const readEntry = async (entry: LegacyFileEntry): Promise<File[]> => {
+    if (entry.isFile && entry.file) {
+      return new Promise((resolve) =>
+        entry.file?.((file) => resolve([file]), () => resolve([])),
+      );
+    }
+    if (!entry.isDirectory || !entry.createReader) return [];
+
+    const reader = entry.createReader();
+    const entries: LegacyFileEntry[] = [];
+    while (true) {
+      const batch = await new Promise<LegacyFileEntry[]>((resolve) =>
+        reader.readEntries(resolve, () => resolve([])),
+      );
+      if (batch.length === 0) break;
+      entries.push(...batch);
+    }
+    return (await Promise.all(entries.map(readEntry))).flat();
+  };
+
+  const filesFromDrop = async (transfer: DataTransfer) => {
+    const entries = Array.from(transfer.items)
+      .map((item) =>
+        (
+          item as unknown as {
+            webkitGetAsEntry?: () => LegacyFileEntry | null;
+          }
+        ).webkitGetAsEntry?.(),
+      )
+      .filter((entry): entry is LegacyFileEntry => Boolean(entry));
+    if (entries.length === 0) return Array.from(transfer.files);
+    return (await Promise.all(entries.map(readEntry))).flat();
+  };
+
+  uploader?.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('button, input[type="file"]')) return;
+    fileInput?.click();
+  });
+  chooseButtons.forEach((button) =>
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      fileInput?.click();
+    }),
+  );
+  optionsButton?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setFolderMenu(optionsButton.getAttribute('aria-expanded') !== 'true');
+  });
+  folderButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setFolderMenu(false);
+    folderInput?.click();
+  });
+
+  fileInput?.addEventListener('change', () => {
+    void handoff(Array.from(fileInput.files || []));
+    fileInput.value = '';
+  });
+  folderInput?.addEventListener('change', () => {
+    void handoff(Array.from(folderInput.files || []));
+    folderInput.value = '';
+  });
+
+  pasteButton?.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    if (!navigator.clipboard?.read) {
+      setStatus('Clipboard access is unavailable. Press Ctrl or Cmd + V instead.', 'error');
+      return;
+    }
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      const files: File[] = [];
+      for (const item of clipboardItems) {
+        const type = item.types.find((candidate) => candidate.startsWith('image/'));
+        if (!type) continue;
+        const blob = await item.getType(type);
+        const extension = type.split('/')[1]?.split('+')[0] || 'png';
+        files.push(new File([blob], `pasted-image-${files.length + 1}.${extension}`, { type }));
+      }
+      await handoff(files);
+    } catch (error) {
+      console.error(error);
+      setStatus('Clipboard access was blocked. Press Ctrl or Cmd + V instead.', 'error');
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (event.target instanceof Node && !uploader?.contains(event.target)) setFolderMenu(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setFolderMenu(false);
+  });
+  document.addEventListener('paste', (event) => {
+    const files = Array.from(event.clipboardData?.files || []);
+    if (files.some(isImage)) {
+      event.preventDefault();
+      void handoff(files);
+    }
+  });
+
+  const resetDropState = () => {
+    dragDepth = 0;
+    document.body.classList.remove('drop-valid', 'drop-invalid', 'drop-directory');
+  };
+
+  const dropState = (transfer: DataTransfer | null) => {
+    const items = Array.from(transfer?.items || []);
+    const entries = items
+      .map((item) =>
+        (
+          item as unknown as {
+            webkitGetAsEntry?: () => LegacyFileEntry | null;
+          }
+        ).webkitGetAsEntry?.(),
+      )
+      .filter((entry): entry is LegacyFileEntry => Boolean(entry));
+    if (entries.some((entry) => entry.isDirectory)) return 'drop-directory';
+    if (
+      items.length === 0 ||
+      items.some(
+        (item) =>
+          item.kind === 'file' &&
+          (item.type.startsWith('image/') || item.type === ''),
+      )
+    ) {
+      return 'drop-valid';
+    }
+    return 'drop-invalid';
+  };
+
+  document.addEventListener('dragenter', (event) => {
+    event.preventDefault();
+    dragDepth += 1;
+    if (dragDepth > 1) return;
+    document.body.classList.add(dropState(event.dataTransfer));
+  });
+  document.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+  });
+  document.addEventListener('dragleave', () => {
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) resetDropState();
+  });
+  document.addEventListener('dragend', resetDropState);
+  document.addEventListener('drop', async (event) => {
+    event.preventDefault();
+    resetDropState();
+    if (!event.dataTransfer) return;
+    await handoff(await filesFromDrop(event.dataTransfer));
+  });
+</script>

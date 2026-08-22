@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import UploadHero from '../components/UploadHero.astro';
+
+const base = import.meta.env.BASE_URL;
+const canonical = 'https://vicoco.uk/squoosh-batch-image-compressor/';
+const title = 'Squoosh Batch Image Compressor - Compress Images in Bulk | Vicoco';
+const description =
+  'Use Vicoco as a Squoosh batch image compressor to compress images in bulk and batch convert JPEG, PNG, WebP and AVIF files privately in your browser.';
+const image = `${canonical}assets/vicoco-editor.webp`;
+
+const faqItems = [
+  {
+    question: 'How do I batch compress images with Squoosh?',
+    answer:
+      'Add multiple images or a folder, choose the output format, quality and resize settings in the Vicoco editor, then process the queue and download the compressed images as a ZIP.',
+  },
+  {
+    question: 'Can I use Squoosh to compress multiple images at once?',
+    answer:
+      'Yes. Vicoco adds a batch queue to Squoosh codecs so one set of compression and resize settings can be applied to every selected image.',
+  },
+  {
+    question: 'Can I batch convert images to WebP or AVIF?',
+    answer:
+      'Yes. Select WebP or AVIF in the editor, preview the result, then export the entire image batch in the chosen format.',
+  },
+  {
+    question: 'Does the Squoosh batch image compressor upload my files?',
+    answer:
+      'No. Image decoding and compression run locally in your browser, so your source files stay on your device.',
+  },
+  {
+    question: 'Which image formats can I compress in bulk?',
+    answer:
+      'You can add JPEG, PNG, WebP, AVIF and SVG images, then export the processed batch as JPEG, PNG, WebP or AVIF files.',
+  },
+  {
+    question: 'Can I resize images while batch compressing them?',
+    answer:
+      'Yes. Set the target width and height in the editor, preview the result, and apply the same resize settings to the complete image queue.',
+  },
+  {
+    question: 'Is the Squoosh batch image compressor free?',
+    answer:
+      'Yes. Vicoco is free to use for batch image compression and does not require an account.',
+  },
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: title,
+      url: canonical,
+      description,
+      isPartOf: {
+        '@type': 'WebSite',
+        name: 'Vicoco',
+        url: 'https://vicoco.uk/',
+      },
+      mainEntity: {
+        '@type': 'WebApplication',
+        name: 'Vicoco Squoosh Batch Image Compressor',
+        url: canonical,
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Any',
+        browserRequirements: 'Requires a modern browser with WebAssembly support',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        featureList: [
+          'Batch image compression',
+          'Batch image conversion to JPEG, PNG, WebP and AVIF',
+          'Local browser processing',
+          'ZIP download',
+        ],
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout {title} {description} {canonical} {image} {structuredData}>
+  <SiteHeader />
+
+  <main id="main-content">
+    <UploadHero
+      titleLines={['Squoosh Batch Image', 'Compressor']}
+      description="Batch compress images with Squoosh codecs in your browser. Add files or a folder, compare quality and file size, then export JPEG, PNG, WebP or AVIF images in bulk."
+      source="squoosh-batch"
+    />
+
+    <section class="process" id="how-it-works" aria-labelledby="process-heading">
+      <div class="container process-layout">
+        <h2 id="process-heading">How to Batch Compress Images with Squoosh</h2>
+        <ol class="process-steps">
+          <li>
+            <span>1</span>
+            <div>
+              <h3>Add images or a folder</h3>
+              <p>Select multiple image files, choose a folder, drag files in or paste an image.</p>
+            </div>
+          </li>
+          <li>
+            <span>2</span>
+            <div>
+              <h3>Choose compression settings</h3>
+              <p>Compare quality and file size, then select the codec, resize and output options.</p>
+            </div>
+          </li>
+          <li>
+            <span>3</span>
+            <div>
+              <h3>Download the compressed batch</h3>
+              <p>Apply the settings to the queue and download every processed image in one ZIP.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="features-heading">
+      <div class="container story-copy">
+        <h2 id="features-heading">Squoosh Batch Image Compressor Features</h2>
+        <p>
+          Batch compress images with Squoosh codecs, preview one result and
+          apply the selected format, quality and resize settings to the queue.
+        </p>
+      </div>
+      <figure class="container editor-figure">
+        <img
+          src={`${base}assets/vicoco-editor.webp`}
+          width="1786"
+          height="1096"
+          loading="lazy"
+          alt="Vicoco Squoosh batch image compressor comparing an original image with a compressed WebP image"
+        />
+        <figcaption>Compare the original and compressed file before processing the batch.</figcaption>
+      </figure>
+      <ul class="container feature-list">
+        <li>
+          <h3>One setting for the batch</h3>
+          <p>Reuse the selected codec, quality and resize options for every queued image.</p>
+        </li>
+        <li>
+          <h3>Original and compressed preview</h3>
+          <p>Compare image quality and file size before processing all images.</p>
+        </li>
+        <li>
+          <h3>One ZIP download</h3>
+          <p>Export the completed image queue together instead of downloading files individually.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="formats" id="formats" aria-labelledby="formats-heading">
+      <div class="container formats-layout">
+        <div class="formats-copy">
+          <h2 id="formats-heading">Convert JPEG, PNG, WebP and AVIF Images in Bulk</h2>
+          <p>
+            Batch convert images to one output format while keeping consistent
+            quality and resize settings across the complete queue.
+          </p>
+        </div>
+        <div class="format-list">
+          <article>
+            <h3>JPEG</h3>
+            <p>Compress photographs in bulk with adjustable lossy quality.</p>
+          </article>
+          <article>
+            <h3>PNG</h3>
+            <p>Batch process lossless graphics and images with transparency.</p>
+          </article>
+          <article>
+            <h3>WebP</h3>
+            <p>Batch convert images to WebP for smaller web-ready files.</p>
+          </article>
+          <article>
+            <h3>AVIF</h3>
+            <p>Batch convert images to AVIF for high-efficiency compression.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacy" aria-labelledby="privacy-heading">
+      <div class="container privacy-layout">
+        <h2 id="privacy-heading">Private Batch Image Compression in Your Browser</h2>
+        <div class="privacy-copy">
+          <p>
+            Squoosh codecs run locally in the browser. Vicoco does not send
+            source images to a processing server.
+          </p>
+          <ul>
+            <li>No account required</li>
+            <li>No image upload</li>
+            <li>No server processing queue</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq" aria-labelledby="faq-heading">
+      <div class="container faq-layout">
+        <h2 id="faq-heading">FAQs</h2>
+        <div class="faq-list">
+          {faqItems.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-heading">
+      <div class="container final-cta-inner">
+        <h2 id="cta-heading">Start Compressing Images in Bulk</h2>
+        <p>Add multiple images or a folder and continue in the Vicoco editor.</p>
+        <button class="button-primary final-cta-button" data-choose-images type="button">
+          <span class="final-cta-label">Start Compressing</span>
+          <span class="final-cta-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

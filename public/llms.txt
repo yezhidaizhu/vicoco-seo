@@ -1,0 +1,23 @@
+# Vicoco Squoosh Batch Image Compressor
+
+> A free batch image compressor powered by Squoosh codecs and processed locally in the browser.
+
+## Main resource
+
+- [Squoosh Batch Image Compressor](https://vicoco.uk/squoosh-batch-image-compressor/): Compress, resize, and convert multiple JPEG, PNG, WebP, AVIF, and SVG images.
+
+## Workflow
+
+- Add multiple images, a folder, dropped files, or a pasted image.
+- Compare image quality and file size in the Vicoco editor.
+- Apply format, quality, and resize settings to the complete queue.
+- Export processed images together as a ZIP.
+
+## Privacy
+
+- Image processing runs locally in the browser.
+- Source images are not uploaded to a processing server.
+
+## Related resource
+
+- [Free Image Compressor](https://vicoco.uk/): Compress individual images online for free.
