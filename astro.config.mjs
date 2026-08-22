@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://vicoco.uk',
-  base: '/compress',
+  base: '/app',
   trailingSlash: 'always',
   build: {
     assets: '_assets',

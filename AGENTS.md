@@ -7,9 +7,10 @@
 - Keep `public/robots.txt` pointed at `https://vicoco.uk/sitemap.xml`.
 - `public/llms.txt` must always include `https://vicoco.uk/` as a main resource, plus every indexable SEO page. Never remove the homepage while editing only this repository.
 - Keep 404 and other non-indexable pages on `noindex` and out of the sitemap.
-- Every SEO content page must remain under the shared `/compress/` URL prefix so Cloudflare needs only one content route. Do not add SEO pages at arbitrary domain-root paths.
-- Until `/compress/` becomes a real directory page, keep its redirect in `public/_redirects` pointed at the primary SEO page.
-- Cloudflare must route `/compress*`, `/robots.txt`, `/sitemap.xml`, and `/llms.txt` to this project; application routes remain owned by `web-squoosh`.
+- Every SEO content page must remain under the shared `/app/` URL prefix so Cloudflare needs only one content route. Do not add SEO pages at arbitrary domain-root paths.
+- Until `/app/` becomes a real directory page, keep its redirect in `public/_redirects` pointed at the primary SEO page.
+- Cloudflare must route `/app/*`, `/robots.txt`, `/sitemap.xml`, and `/llms.txt` to this project; application routes remain owned by `web-squoosh`.
+- Keep the `/app/* /:splat 200` rule in `public/_redirects`. It strips the public prefix internally so Cloudflare can read Astro's files from the root of `dist`.
 - Never hand-edit `dist`.
 - Do not run a production build unless the user requests it.
 </INSTRUCTIONS>

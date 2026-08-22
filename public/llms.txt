@@ -5,7 +5,7 @@
 ## Main resources
 
 - [Free Image Compressor Online](https://vicoco.uk/): Compress and convert images locally in the Vicoco browser editor.
-- [Squoosh Batch Image Compressor - Compress Images in Bulk](https://vicoco.uk/compress/squoosh-batch-image-compressor/): Compress, resize, and convert multiple JPEG, PNG, WebP, AVIF, and SVG images.
+- [Squoosh Batch Image Compressor - Compress Images in Bulk](https://vicoco.uk/app/squoosh-batch-image-compressor/): Compress, resize, and convert multiple JPEG, PNG, WebP, AVIF, and SVG images.
 
 ## Workflow
 
