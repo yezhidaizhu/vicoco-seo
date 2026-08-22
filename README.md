@@ -49,3 +49,6 @@ Route `/`, `/editor*`, `/handoff*`, and application assets to `web-squoosh`.
 All SEO content pages must stay under `/compress/`. Astro places their JS, CSS
 and public assets under the same prefix, so new SEO pages do not require new
 Cloudflare routes. The public SEO files keep their domain-root URLs.
+
+`/compress/` redirects to the primary Squoosh batch compressor page until a
+dedicated SEO directory page replaces it.
