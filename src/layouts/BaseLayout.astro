@@ -18,6 +18,7 @@ const {
   structuredData,
   robots = 'index, follow, max-image-preview:large',
 } = Astro.props;
+const isProduction = import.meta.env.PROD;
 ---
 
 <!doctype html>
@@ -49,17 +50,21 @@ const {
     {structuredData && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
-    <script
-      is:inline
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-YS3QJJ1B9D"
-    ></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-YS3QJJ1B9D');
-    </script>
+    {isProduction && (
+      <Fragment>
+        <script
+          is:inline
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-YS3QJJ1B9D"
+        ></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', 'G-YS3QJJ1B9D');
+        </script>
+      </Fragment>
+    )}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

@@ -7,7 +7,8 @@
 - Keep `public/robots.txt` pointed at `https://vicoco.uk/sitemap.xml`.
 - `public/llms.txt` must always include `https://vicoco.uk/` as a main resource, plus every indexable SEO page. Never remove the homepage while editing only this repository.
 - Keep 404 and other non-indexable pages on `noindex` and out of the sitemap.
-- Cloudflare must route `/robots.txt`, `/sitemap.xml`, `/llms.txt`, and SEO content paths to this project; application routes remain owned by `web-squoosh`.
+- Every SEO content page must remain under the shared `/compress/` URL prefix so Cloudflare needs only one content route. Do not add SEO pages at arbitrary domain-root paths.
+- Cloudflare must route `/compress*`, `/robots.txt`, `/sitemap.xml`, and `/llms.txt` to this project; application routes remain owned by `web-squoosh`.
 - Never hand-edit `dist`.
 - Do not run a production build unless the user requests it.
 </INSTRUCTIONS>

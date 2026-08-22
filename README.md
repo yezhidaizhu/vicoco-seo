@@ -14,7 +14,7 @@ npm run build
 
 The production page is built for:
 
-`https://vicoco.uk/squoosh-batch-image-compressor/`
+`https://vicoco.uk/compress/squoosh-batch-image-compressor/`
 
 The page stores selected images in the same-origin `vicoco-handoff` IndexedDB
 database, then sends the transfer ID to the Vicoco app. Image data never leaves
@@ -40,11 +40,12 @@ deployment directory. Build with `npm run build`, then deploy with
 
 Route these public paths to the deployed `vicoco-seo` project:
 
-- `/squoosh-batch-image-compressor*`
+- `/compress*`
 - `/robots.txt`
 - `/sitemap.xml`
 - `/llms.txt`
 
 Route `/`, `/editor*`, `/handoff*`, and application assets to `web-squoosh`.
-The public SEO files must keep their root URLs even though the Astro content page
-uses the `/squoosh-batch-image-compressor/` base path.
+All SEO content pages must stay under `/compress/`. Astro places their JS, CSS
+and public assets under the same prefix, so new SEO pages do not require new
+Cloudflare routes. The public SEO files keep their domain-root URLs.
