@@ -34,6 +34,10 @@ files when SEO pages are added or changed here.
 
 ## Cloudflare routing
 
+Cloudflare Workers Static Assets uses `wrangler.jsonc` with `dist` as the
+deployment directory. Build with `npm run build`, then deploy with
+`npx wrangler deploy` or connect the repository through Cloudflare Builds.
+
 Route these public paths to the deployed `vicoco-seo` project:
 
 - `/squoosh-batch-image-compressor*`
