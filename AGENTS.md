@@ -2,6 +2,12 @@
 
 <INSTRUCTIONS>
 - This project owns Vicoco's SEO content pages and the authoritative domain-root `robots.txt`, `sitemap.xml`, and `llms.txt` for `https://vicoco.uk`.
+- Before selecting keywords or writing feature claims, read `docs/README.md`, `docs/seo-keyword-opportunities.md`, and `docs/product-capabilities.md`.
+- Keep new raw keyword exports in `docs/keyword-data/` and update its `README.md` inventory without rewriting the source data.
+- Before drafting or implementing an SEO page, follow `docs/scont/README.md`; source relevant FAQs from `docs/keyword-data/seo-ques.js` first and include at least six FAQs.
+- Before adding or changing Footer links, follow `docs/internal-linking-plan.md`; keep the complete related-tools group at five links or fewer and avoid orphan pages.
+- Keep `/app/all-tools/` development-only, `noindex`, and absent from production output, sitemap, `llms.txt`, Footer links, and the internal-link plan.
+- Keep `docs/product-capabilities.md` synchronized with the product repository's `docs/implemented-features.md`; never claim an unchecked feature as implemented.
 - When adding, renaming, removing, or materially changing an indexable page, review and update its title, meta description, canonical URL, robots meta, Open Graph data, JSON-LD, internal links, sitemap output, `public/robots.txt`, and `public/llms.txt`.
 - `public/sitemap.xml` is intentionally static and must always include the main app homepage `https://vicoco.uk/`, even though that page is implemented in the separate `web-squoosh` project. Never remove the homepage while editing only this repository.
 - Keep `public/robots.txt` pointed at `https://vicoco.uk/sitemap.xml`.
