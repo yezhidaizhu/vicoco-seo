@@ -6,6 +6,22 @@
 
 - [Free Image Compressor Online](https://vicoco.uk/): Compress and convert images locally in the Vicoco browser editor.
 - [Squoosh Batch Image Compressor - Compress Images in Bulk](https://vicoco.uk/app/squoosh-batch-image-compressor/): Compress, resize, and convert multiple JPEG, PNG, WebP, AVIF, and SVG images.
+- [Kompres Foto Online Gratis - Cepat dan Aman](https://vicoco.uk/app/id/kompres-foto/): Kompres foto dan kecilkan ukuran file JPG, PNG, WebP, dan AVIF langsung di browser.
+- [PNG to WebP Converter Online - Free and Private](https://vicoco.uk/app/png-to-webp-converter/): Convert PNG images to WebP locally with quality comparison and batch export.
+- [Image Size Checker Online - File Size and Dimensions](https://vicoco.uk/app/image-size-checker/): Check image file size, pixel dimensions, format, and aspect ratio in an inline local list, then optionally send the list to the batch compressor.
+- [Image Stretcher Online - Resize Width and Height](https://vicoco.uk/app/image-stretcher/): Change image width and height and preview the resized result.
+- [Kompres JPG Online Gratis - Cepat dan Aman](https://vicoco.uk/app/id/kompres-jpg/): Atur kualitas dan dimensi JPG, lalu unduh satu foto atau seluruh antrean.
+- [Kompres PNG Online Gratis - Cepat dan Aman](https://vicoco.uk/app/id/kompres-png/): Kurangi warna PNG, pertahankan transparansi, dan proses banyak file.
+- [Сжать фото онлайн бесплатно — быстро и безопасно](https://vicoco.uk/app/ru/szhat-foto/): Уменьшите размер фото и сравните качество прямо в браузере.
+- [Сжать JPG онлайн бесплатно — быстро и безопасно](https://vicoco.uk/app/ru/szhat-jpg/): Настройте качество и размеры JPG без загрузки на сервер.
+- [圖片壓縮線上免費工具｜快速、安全、不上傳](https://vicoco.uk/app/zh-tw/image-compressor/): 在瀏覽器壓縮圖片、比較畫質並批次下載。
+- [Compresser PNG en ligne gratuitement — rapide et privé](https://vicoco.uk/app/fr/compresser-png/): Réduisez les couleurs du PNG et conservez sa transparence dans le navigateur.
+- [Comprimi JPG online gratis — veloce e sicuro](https://vicoco.uk/app/it/comprimi-jpg/): Regola qualità e dimensioni JPG e scarica i risultati localmente.
+- [Redimensionar Imagen Online Gratis - Ancho y Alto](https://vicoco.uk/app/es/redimensionar-imagen-online/): Cambia el ancho y alto en píxeles y compara el resultado.
+- [Nén Ảnh JPG Online Miễn Phí - Nhanh và Riêng Tư](https://vicoco.uk/app/vi/nen-anh-jpg/): Điều chỉnh chất lượng và kích thước JPG ngay trong trình duyệt.
+- [Nén Ảnh PNG Online Miễn Phí - Giữ Nền Trong Suốt](https://vicoco.uk/app/vi/nen-anh-png/): Giảm bảng màu PNG, giữ vùng trong suốt và tải kết quả.
+- [ลดขนาดไฟล์ JPG ออนไลน์ฟรี - รวดเร็วและปลอดภัย](https://vicoco.uk/app/th/reduce-jpg-size/): ปรับคุณภาพและขนาดพิกเซล JPG ภายในเบราว์เซอร์
+- [PNG Dosya Boyutu Küçültme - Ücretsiz ve Güvenli](https://vicoco.uk/app/tr/png-dosya-boyutu-kucultme/): PNG renklerini azaltın, şeffaflığı koruyun ve sonucu karşılaştırın.
 
 ## Workflow
 
