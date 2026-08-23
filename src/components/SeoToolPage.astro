@@ -1,5 +1,6 @@
 ---
 import type { ToolPageData } from '../data/toolPages';
+import { demoAssetsForKind, demoCopyForLang } from '../data/demoAssets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CheckerSections from './tool-pages/CheckerSections.astro';
 import ConverterSections from './tool-pages/ConverterSections.astro';
@@ -19,6 +20,8 @@ interface Props {
 const { page } = Astro.props;
 const canonical = `https://vicoco.uk/app/${page.path}/`;
 const image = 'https://vicoco.uk/app/assets/vicoco-editor.webp';
+const demos = demoAssetsForKind(page.kind);
+const uploadLabels = { ...page.uploadLabels, ...demoCopyForLang(page.lang) };
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -79,7 +82,8 @@ const structuredData = {
       titleLines={page.h1Lines}
       description={page.heroDescription}
       source={page.source}
-      labels={page.uploadLabels}
+      {demos}
+      labels={uploadLabels}
     />
 
     {page.kind === 'checker' && <ImageCheckerResults />}

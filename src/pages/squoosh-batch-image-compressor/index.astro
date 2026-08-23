@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import UploadHero from '../../components/UploadHero.astro';
+import { allDemoAssets } from '../../data/demoAssets';
 
 const base = import.meta.env.BASE_URL;
 const canonical = 'https://vicoco.uk/app/squoosh-batch-image-compressor/';
@@ -102,6 +103,7 @@ const structuredData = {
       titleLines={['Squoosh Batch Image', 'Compressor']}
       description="Batch compress images with Squoosh codecs in your browser. Add files or a folder, compare quality and file size, then export JPEG, PNG, WebP or AVIF images in bulk."
       source="squoosh-batch"
+      demos={allDemoAssets}
     />
 
     <section class="process" id="how-it-works" aria-labelledby="process-heading">

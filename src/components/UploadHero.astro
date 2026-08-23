@@ -1,8 +1,11 @@
 ---
+import type { DemoAsset } from '../data/demoAssets';
+
 interface Props {
   titleLines: string[];
   description: string;
   source: string;
+  demos?: DemoAsset[];
   labels?: {
     dropBeforePaste?: string;
     dropAfterPaste?: string;
@@ -17,12 +20,14 @@ interface Props {
     imageSingular?: string;
     imagePlural?: string;
     editorError?: string;
+    trySample?: string;
+    sampleError?: string;
     clipboardUnavailable?: string;
     clipboardBlocked?: string;
   };
 }
 
-const { titleLines, description, source, labels = {} } = Astro.props;
+const { titleLines, description, source, demos = [], labels = {} } = Astro.props;
 const copy = {
   dropBeforePaste: labels.dropBeforePaste ?? 'Drop images or folders here, or ',
   dropAfterPaste: labels.dropAfterPaste ?? ', or click to choose',
@@ -37,6 +42,8 @@ const copy = {
   imageSingular: labels.imageSingular ?? 'image',
   imagePlural: labels.imagePlural ?? 'images',
   editorError: labels.editorError ?? 'Could not open the editor. Please try again.',
+  trySample: labels.trySample ?? 'Try a sample',
+  sampleError: labels.sampleError ?? 'Could not load the sample image. Please try again.',
   clipboardUnavailable:
     labels.clipboardUnavailable ??
     'Clipboard access is unavailable. Press Ctrl or Cmd + V instead.',
@@ -72,6 +79,7 @@ const copy = {
       data-image-singular={copy.imageSingular}
       data-image-plural={copy.imagePlural}
       data-editor-error={copy.editorError}
+      data-sample-error={copy.sampleError}
       data-clipboard-unavailable={copy.clipboardUnavailable}
       data-clipboard-blocked={copy.clipboardBlocked}
       aria-describedby="upload-status"
@@ -138,6 +146,35 @@ const copy = {
       </span>
     </div>
     <p class="hero-description">{description}</p>
+    {demos.length > 0 && (
+      <div class="demo-picker" aria-label={copy.trySample}>
+        <p>{copy.trySample}</p>
+        <div class="demo-list">
+          {demos.map((demo) => (
+            <button
+              class="demo-button"
+              type="button"
+              data-demo
+              data-demo-source={demo.source}
+              data-demo-filename={demo.filename}
+              data-demo-type={demo.mimeType}
+              aria-label={`${copy.trySample}: ${demo.filename}`}
+            >
+              <img
+                src={demo.thumbnail}
+                width="200"
+                height="200"
+                loading="lazy"
+                decoding="async"
+                alt=""
+              />
+              <span class="demo-format">{demo.mimeType === 'image/png' ? 'PNG' : 'JPG'}</span>
+              <span class="demo-spinner" aria-hidden="true"></span>
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 </section>
 
@@ -171,6 +208,9 @@ const copy = {
   const folderButton = uploader?.querySelector<HTMLButtonElement>('[data-folder]');
   const pasteButton = uploader?.querySelector<HTMLButtonElement>('[data-paste]');
   const status = uploader?.querySelector<HTMLElement>('[data-status]');
+  const demoButtons = Array.from(
+    uploadRoot?.querySelectorAll<HTMLButtonElement>('[data-demo]') || [],
+  );
   const source = uploader?.dataset.source || 'seo';
   const isChecker = source === 'image-size-checker';
   const labels = {
@@ -179,6 +219,8 @@ const copy = {
     imageSingular: uploader?.dataset.imageSingular || 'image',
     imagePlural: uploader?.dataset.imagePlural || 'images',
     editorError: uploader?.dataset.editorError || 'Could not open the editor. Please try again.',
+    sampleError:
+      uploader?.dataset.sampleError || 'Could not load the sample image. Please try again.',
     clipboardUnavailable:
       uploader?.dataset.clipboardUnavailable ||
       'Clipboard access is unavailable. Press Ctrl or Cmd + V instead.',
@@ -186,6 +228,7 @@ const copy = {
       uploader?.dataset.clipboardBlocked ||
       'Clipboard access was blocked. Press Ctrl or Cmd + V instead.',
   };
+  let activeDemo: HTMLButtonElement | undefined;
   let dragDepth = 0;
   if (folderInput) {
     (folderInput as HTMLInputElement & { webkitdirectory: boolean }).webkitdirectory = true;
@@ -207,6 +250,20 @@ const copy = {
     });
     if (optionsButton) optionsButton.disabled = state === 'busy';
     if (folderButton) folderButton.disabled = state === 'busy';
+    demoButtons.forEach((button) => {
+      button.disabled = state === 'busy';
+    });
+  };
+  const setActiveDemo = (button?: HTMLButtonElement) => {
+    if (activeDemo) {
+      delete activeDemo.dataset.loading;
+      activeDemo.removeAttribute('aria-busy');
+    }
+    activeDemo = button;
+    if (activeDemo) {
+      activeDemo.dataset.loading = 'true';
+      activeDemo.setAttribute('aria-busy', 'true');
+    }
   };
   window.addEventListener('vicoco:checker-status', (event) => {
     const detail = (event as CustomEvent<{
@@ -214,6 +271,7 @@ const copy = {
       state?: 'idle' | 'busy' | 'error';
     }>).detail;
     setStatus(detail.message, detail.state);
+    if (detail.state !== 'busy') setActiveDemo();
   });
 
   const isImage = (file: File) =>
@@ -277,6 +335,7 @@ const copy = {
       window.location.assign(destination);
     } catch (error) {
       console.error(error);
+      setActiveDemo();
       setStatus(labels.editorError, 'error');
     }
   };
@@ -297,6 +356,27 @@ const copy = {
     }
     await transferToEditor(files);
   };
+
+  demoButtons.forEach((button) =>
+    button.addEventListener('click', async () => {
+      if (activeDemo) return;
+      setActiveDemo(button);
+      setStatus(`${labels.preparing} 1 ${labels.imageSingular}...`, 'busy');
+      try {
+        const response = await fetch(button.dataset.demoSource || '');
+        if (!response.ok) throw new Error(`Demo request failed: ${response.status}`);
+        const blob = await response.blob();
+        const file = new File([blob], button.dataset.demoFilename || 'sample', {
+          type: button.dataset.demoType || blob.type,
+        });
+        await handoff([file]);
+      } catch (error) {
+        console.error(error);
+        setActiveDemo();
+        setStatus(labels.sampleError, 'error');
+      }
+    }),
+  );
 
   const readEntry = async (entry: LegacyFileEntry): Promise<File[]> => {
     if (entry.isFile && entry.file) {

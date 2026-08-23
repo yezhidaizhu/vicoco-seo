@@ -556,6 +556,95 @@ h3 {
   animation: hero-description-in 460ms 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
+.demo-picker {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  opacity: 0;
+  animation: hero-description-in 460ms 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.demo-picker > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.demo-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.demo-button {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid var(--text);
+  border-radius: 0;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 180ms ease, opacity 180ms ease;
+}
+
+.demo-button:hover {
+  border-color: var(--brand);
+}
+
+.demo-button:disabled {
+  cursor: wait;
+  opacity: 0.48;
+}
+
+.demo-button[data-loading='true'] {
+  opacity: 1;
+}
+
+.demo-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.demo-button[data-loading='true'] img {
+  opacity: 0.35;
+}
+
+.demo-format {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 2px 5px;
+  background: var(--text);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 850;
+  line-height: 1.4;
+}
+
+.demo-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid rgba(31, 31, 31, 0.24);
+  border-top-color: var(--text);
+  border-radius: 50%;
+  animation: demo-spin 700ms linear infinite;
+}
+
+.demo-button[data-loading='true'] .demo-spinner {
+  display: block;
+}
+
 .features,
 .process,
 .formats,
@@ -1015,6 +1104,12 @@ h3 {
   }
 }
 
+@keyframes demo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 900px) {
   h2 {
     font-size: 35px;
@@ -1104,6 +1199,11 @@ h3 {
     margin-top: 18px;
   }
 
+  .demo-button {
+    width: 88px;
+    height: 88px;
+  }
+
   .features,
   .process,
   .formats,
@@ -1191,7 +1291,8 @@ h3 {
   .upload-copy,
   .upload-actions,
   .upload-status,
-  .hero-description {
+  .hero-description,
+  .demo-picker {
     opacity: 1;
   }
 }
