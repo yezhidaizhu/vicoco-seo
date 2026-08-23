@@ -1,0 +1,148 @@
+---
+import type { ToolPageData } from '../data/toolPages';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CheckerSections from './tool-pages/CheckerSections.astro';
+import ConverterSections from './tool-pages/ConverterSections.astro';
+import GeneralCompressorSections from './tool-pages/GeneralCompressorSections.astro';
+import JpgCompressorSections from './tool-pages/JpgCompressorSections.astro';
+import PngCompressorSections from './tool-pages/PngCompressorSections.astro';
+import ResizeSections from './tool-pages/ResizeSections.astro';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+import UploadHero from './UploadHero.astro';
+import ImageCheckerResults from './ImageCheckerResults.astro';
+
+interface Props {
+  page: ToolPageData;
+}
+
+const { page } = Astro.props;
+const canonical = `https://vicoco.uk/app/${page.path}/`;
+const image = 'https://vicoco.uk/app/assets/vicoco-editor.webp';
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: page.title,
+      url: canonical,
+      description: page.description,
+      inLanguage: page.lang,
+      isPartOf: {
+        '@type': 'WebSite',
+        name: 'Vicoco',
+        url: 'https://vicoco.uk/',
+      },
+      mainEntity: {
+        '@type': 'WebApplication',
+        name: `Vicoco ${page.title.split(/\s[-—｜]\s/)[0]}`,
+        url: canonical,
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        featureList: page.featureList,
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: page.lang,
+      mainEntity: page.faqs.map((item) => ({
+        '@type': 'Question',
+        name: item.title,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.body,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  openGraphDescription={page.ogDescription}
+  {canonical}
+  {image}
+  imageAlt={page.imageAlt}
+  lang={page.lang}
+  openGraphLocale={page.ogLocale}
+  skipLinkLabel={page.skipLinkLabel}
+  {structuredData}
+>
+  <SiteHeader homeAriaLabel={page.footerLabels.homeAriaLabel} />
+
+  <main id="main-content">
+    <UploadHero
+      titleLines={page.h1Lines}
+      description={page.heroDescription}
+      source={page.source}
+      labels={page.uploadLabels}
+    />
+
+    {page.kind === 'checker' && <ImageCheckerResults />}
+
+    {page.kind === 'converter' && <ConverterSections {page} />}
+    {page.kind === 'checker' && <CheckerSections {page} />}
+    {page.kind === 'resize' && <ResizeSections {page} />}
+    {page.kind === 'general-compressor' && <GeneralCompressorSections {page} />}
+    {page.kind === 'jpg-compressor' && <JpgCompressorSections {page} />}
+    {page.kind === 'png-compressor' && <PngCompressorSections {page} />}
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <div class="container faq-layout faq-layout-tool">
+        <h2 id="faq-heading">{page.faqHeading}</h2>
+        <div class="faq-list">
+          {page.faqs.map((item) => (
+            <details>
+              <summary>{item.title}</summary>
+              <p>{item.body}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-heading">
+      <div class="container final-cta-inner">
+        <h2 id="cta-heading">{page.ctaHeading}</h2>
+        <p>{page.ctaBody}</p>
+        <button class="button-primary final-cta-button" data-choose-images type="button">
+          <span class="final-cta-label">{page.ctaButton}</span>
+          <span class="final-cta-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter relatedLinks={page.relatedLinks} labels={page.footerLabels} />
+</BaseLayout>
+
+<style>
+  .faq-layout-tool {
+    display: block;
+  }
+
+  .faq-layout-tool > h2 {
+    margin-bottom: 32px;
+  }
+
+  .faq {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 760px) {
+    .faq {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+  }
+</style>

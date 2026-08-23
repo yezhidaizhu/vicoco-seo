@@ -6,6 +6,12 @@ interface Props {
   description: string;
   canonical?: string;
   image?: string;
+  imageAlt?: string;
+  lang?: string;
+  openGraphDescription?: string;
+  openGraphLocale?: string;
+  skipLinkLabel?: string;
+  alternates?: Array<{ hrefLang: string; href: string }>;
   structuredData?: Record<string, unknown>;
   robots?: string;
 }
@@ -15,6 +21,12 @@ const {
   description,
   canonical,
   image,
+  imageAlt = 'Vicoco image compression editor comparing an original and compressed image',
+  lang = 'en',
+  openGraphDescription = description,
+  openGraphLocale,
+  skipLinkLabel = 'Skip to content',
+  alternates = [],
   structuredData,
   robots = 'index, follow, max-image-preview:large',
 } = Astro.props;
@@ -22,30 +34,32 @@ const isProduction = import.meta.env.PROD;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="robots" content={robots} />
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
+    {
+      alternates.map((alternate) => (
+        <link rel="alternate" hreflang={alternate.hrefLang} href={alternate.href} />
+      ))
+    }
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Vicoco" />
+    {openGraphLocale && <meta property="og:locale" content={openGraphLocale} />}
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={openGraphDescription} />
     {image && <meta property="og:image" content={image} />}
-    {image && (
-      <meta
-        property="og:image:alt"
-        content="Vicoco image compression editor comparing an original and compressed image"
-      />
-    )}
+    {image && <meta property="og:image:alt" content={imageAlt} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={openGraphDescription} />
     {image && <meta name="twitter:image" content={image} />}
     {structuredData && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
@@ -67,7 +81,7 @@ const isProduction = import.meta.env.PROD;
     )}
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{skipLinkLabel}</a>
     <slot />
   </body>
 </html>

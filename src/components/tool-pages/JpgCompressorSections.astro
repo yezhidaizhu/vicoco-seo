@@ -1,0 +1,340 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'jpg-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="jpg-quality" aria-labelledby="jpg-quality-title">
+  <div class="container quality-shell">
+    <header>
+      <h2 id="jpg-quality-title">{content.qualityHeading}</h2>
+      <p>{content.qualityBody}</p>
+    </header>
+
+    <div class="quality-instrument" aria-label={content.qualityHeading}>
+      <div class="quality-scale"><span>−</span><i></i><b>78</b><span>+</span></div>
+      <div class="quality-readings">
+        <span><small>Q</small><strong>78</strong></span>
+        <span><small>KB</small><strong>640 KB</strong></span>
+        <span><small>Δ</small><strong>−54%</strong></span>
+      </div>
+    </div>
+
+    <dl class="quality-factors">
+      {content.qualityFactors.map((factor, index) => (
+        <div><dt><span>0{index + 1}</span>{factor.title}</dt><dd>{factor.body}</dd></div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<section class="jpg-artifacts" aria-labelledby="jpg-artifacts-title">
+  <div class="container artifact-shell">
+    <div class="artifact-copy">
+      <h2 id="jpg-artifacts-title">{content.artifactHeading}</h2>
+      <p>{content.artifactBody}</p>
+    </div>
+    <div class="artifact-strip" aria-hidden="true">
+      <figure><div class="crop crop-high"></div><figcaption>90</figcaption></figure>
+      <figure><div class="crop crop-mid"></div><figcaption>70</figcaption></figure>
+      <figure><div class="crop crop-low"></div><figcaption>40</figcaption></figure>
+    </div>
+    <div class="artifact-guide">
+      {content.workflow.map((step, index) => (
+        <article><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="jpg-export" aria-labelledby="jpg-export-title">
+  <div class="container export-shell">
+    <header>
+      <h2 id="jpg-export-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+    </header>
+    <div class="export-table">
+      {content.exportRules.map((rule, index) => (
+        <article><span>{index === 0 ? 'Q' : index === 1 ? 'PX' : 'ZIP'}</span><h3>{rule.title}</h3><p>{rule.body}</p></article>
+      ))}
+    </div>
+    <aside>
+      <div><h3>{content.localHeading}</h3><p>{content.localBody}</p></div>
+      <ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .jpg-quality,
+  .jpg-artifacts,
+  .jpg-export {
+    padding: 80px 0;
+  }
+
+  .quality-shell header,
+  .artifact-copy {
+    max-width: 680px;
+  }
+
+  .quality-shell header p,
+  .quality-factors dd,
+  .artifact-copy p,
+  .artifact-guide p,
+  .export-shell header p,
+  .export-table p,
+  .export-shell aside p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .quality-instrument {
+    margin-top: 50px;
+    border: 2px solid var(--text);
+  }
+
+  .quality-scale {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 28px;
+  }
+
+  .quality-scale > span {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .quality-scale i {
+    position: relative;
+    height: 10px;
+    background: linear-gradient(90deg, var(--rule), var(--brand));
+  }
+
+  .quality-scale i::after {
+    position: absolute;
+    top: -7px;
+    left: 77%;
+    width: 4px;
+    height: 24px;
+    background: var(--text);
+    content: '';
+  }
+
+  .quality-scale b {
+    color: var(--brand-text);
+    font-size: 24px;
+  }
+
+  .quality-readings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--text);
+  }
+
+  .quality-readings span {
+    padding: 18px 28px;
+  }
+
+  .quality-readings span + span {
+    border-left: 1px solid var(--rule);
+  }
+
+  .quality-readings small,
+  .quality-readings strong {
+    display: block;
+  }
+
+  .quality-readings small {
+    color: var(--muted);
+  }
+
+  .quality-readings strong {
+    margin-top: 4px;
+    font-size: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .quality-factors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin: 42px 0 0;
+  }
+
+  .quality-factors dt {
+    margin-bottom: 10px;
+    font-weight: 850;
+  }
+
+  .quality-factors dt span {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--brand-text);
+    font-size: 11px;
+  }
+
+  .artifact-shell {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.75fr) minmax(0, 1.25fr);
+    gap: 72px;
+  }
+
+  .artifact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .artifact-strip figure {
+    margin: 0;
+  }
+
+  .crop {
+    aspect-ratio: 1;
+    border: 1px solid var(--text);
+    background: linear-gradient(135deg, var(--brand) 0 48%, #fff 49% 60%, var(--text) 61%);
+  }
+
+  .crop-mid {
+    background-size: 14px 14px;
+  }
+
+  .crop-low {
+    background-size: 26px 26px;
+    image-rendering: pixelated;
+  }
+
+  .artifact-strip figcaption {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+    text-align: center;
+  }
+
+  .artifact-guide {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .artifact-guide article {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .artifact-guide article > span {
+    color: var(--brand-text);
+    font-weight: 900;
+  }
+
+  .artifact-guide h3 {
+    margin-bottom: 8px;
+  }
+
+  .export-shell > header {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+  }
+
+  .export-table {
+    margin-top: 44px;
+  }
+
+  .export-table article {
+    display: grid;
+    grid-template-columns: 52px minmax(180px, 0.8fr) minmax(0, 1.2fr);
+    gap: 22px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .export-table article > span {
+    color: var(--brand-text);
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .export-shell aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 56px;
+    padding-left: 22px;
+    border-left: 4px solid var(--brand);
+  }
+
+  .export-shell aside ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 750;
+  }
+
+  .export-shell aside li + li {
+    margin-top: 8px;
+  }
+
+  @media (max-width: 760px) {
+    .jpg-quality,
+    .jpg-artifacts,
+    .jpg-export {
+      padding: 64px 0;
+    }
+
+    .quality-scale {
+      grid-template-columns: auto 1fr auto;
+      padding: 22px 16px;
+    }
+
+    .quality-scale b {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .quality-scale > span:last-child {
+      display: none;
+    }
+
+    .quality-readings,
+    .quality-factors,
+    .artifact-shell,
+    .artifact-guide,
+    .export-shell > header,
+    .export-shell aside {
+      grid-template-columns: 1fr;
+    }
+
+    .quality-readings span + span {
+      border-top: 1px solid var(--rule);
+      border-left: 0;
+    }
+
+    .artifact-shell {
+      gap: 36px;
+    }
+
+    .artifact-guide {
+      grid-column: 1;
+    }
+
+    .export-table article {
+      grid-template-columns: 42px minmax(0, 1fr);
+    }
+
+    .export-table article p {
+      grid-column: 2;
+    }
+  }
+</style>

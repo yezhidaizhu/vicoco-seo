@@ -6,13 +6,29 @@ interface FooterLink {
 
 interface Props {
   relatedLinks?: FooterLink[];
+  labels?: {
+    homeAriaLabel?: string;
+    relatedTools?: string;
+    relatedToolsAriaLabel?: string;
+    freeImageCompressor?: string;
+    vicocoLinksAriaLabel?: string;
+    privacy?: string;
+  };
 }
 
 const base = import.meta.env.BASE_URL;
 const year = new Date().getFullYear();
-const { relatedLinks = [] } = Astro.props;
+const { relatedLinks = [], labels = {} } = Astro.props;
+const copy = {
+  homeAriaLabel: labels.homeAriaLabel ?? 'Vicoco home',
+  relatedTools: labels.relatedTools ?? 'Related tools',
+  relatedToolsAriaLabel: labels.relatedToolsAriaLabel ?? 'Related tools',
+  freeImageCompressor: labels.freeImageCompressor ?? 'Free Image Compressor',
+  vicocoLinksAriaLabel: labels.vicocoLinksAriaLabel ?? 'Vicoco links',
+  privacy: labels.privacy ?? 'Privacy',
+};
 const toolLinks = [
-  { label: 'Free Image Compressor', href: 'https://vicoco.uk/' },
+  { label: copy.freeImageCompressor, href: '/' },
   ...relatedLinks,
 ];
 ---
@@ -28,22 +44,22 @@ const toolLinks = [
   </svg>
   <div class="container footer-main">
     <div class="footer-brand-block">
-      <a class="brand" href="https://vicoco.uk/" aria-label="Vicoco home">
+      <a class="brand" href="/" aria-label={copy.homeAriaLabel}>
         <img src={`${base}assets/vicoco-logo.svg`} width="58" height="58" alt="" />
         <span>Vicoco</span>
       </a>
     </div>
     <div class="footer-groups">
       <div class="footer-group">
-        <p class="footer-group-title">Related tools</p>
-        <nav class="footer-nav" aria-label="Related tools">
+        <p class="footer-group-title">{copy.relatedTools}</p>
+        <nav class="footer-nav" aria-label={copy.relatedToolsAriaLabel}>
           {toolLinks.map((link) => <a href={link.href}>{link.label}</a>)}
         </nav>
       </div>
       <div class="footer-group">
         <p class="footer-group-title">Vicoco</p>
-        <nav class="footer-nav" aria-label="Vicoco links">
-          <a href="https://github.com/yezhidaizhu/web-squoosh-batchlet#privacy">Privacy</a>
+        <nav class="footer-nav" aria-label={copy.vicocoLinksAriaLabel}>
+          <a href="https://github.com/yezhidaizhu/web-squoosh-batchlet#privacy">{copy.privacy}</a>
           <a href="https://github.com/yezhidaizhu/web-squoosh-batchlet">GitHub</a>
         </nav>
       </div>

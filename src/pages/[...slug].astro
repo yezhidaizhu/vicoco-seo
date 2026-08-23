@@ -1,0 +1,28 @@
+---
+import AllToolsPage from '../components/AllToolsPage.astro';
+import SeoToolPage from '../components/SeoToolPage.astro';
+import { toolPages, type ToolPageData } from '../data/toolPages';
+
+export function getStaticPaths() {
+  const pagePaths: Array<{ params: { slug: string }; props: Props }> = toolPages.map((page) => ({
+    params: { slug: page.path },
+    props: { page },
+  }));
+  if (!import.meta.env.PROD) {
+    pagePaths.push({
+      params: { slug: 'all-tools' },
+      props: { devIndex: true },
+    });
+  }
+  return pagePaths;
+}
+
+interface Props {
+  page?: ToolPageData;
+  devIndex?: boolean;
+}
+
+const { page, devIndex = false } = Astro.props;
+---
+
+{devIndex ? <AllToolsPage /> : page && <SeoToolPage {page} />}

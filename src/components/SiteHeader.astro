@@ -1,10 +1,15 @@
 ---
+interface Props {
+  homeAriaLabel?: string;
+}
+
 const base = import.meta.env.BASE_URL;
+const { homeAriaLabel = 'Vicoco home' } = Astro.props;
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="https://vicoco.uk/" aria-label="Vicoco home">
+    <a class="brand" href="/" aria-label={homeAriaLabel}>
       <img src={`${base}assets/vicoco-logo.svg`} width="34" height="34" alt="" />
       <span>Vicoco</span>
     </a>

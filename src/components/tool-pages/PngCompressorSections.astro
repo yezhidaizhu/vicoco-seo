@@ -1,0 +1,375 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'png-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="png-lab" aria-labelledby="png-lab-title">
+  <div class="container lab-layout">
+    <header>
+      <h2 id="png-lab-title">{content.paletteHeading}</h2>
+      <p>{content.paletteBody}</p>
+    </header>
+
+    <div class="palette-workbench">
+      <div class="palette-preview" aria-hidden="true">
+        <div class="checker"><span></span></div>
+        <div class="swatches">{Array.from({ length: 8 }).map((_, index) => <i class={`swatch-${index}`}></i>)}</div>
+      </div>
+      <div class="palette-readout">
+        <span><small>#</small><strong>64</strong></span>
+        <span><small>D</small><strong>72%</strong></span>
+        <span><small>α</small><strong>✓</strong></span>
+      </div>
+    </div>
+
+    <div class="palette-controls">
+      {content.paletteControls.map((control, index) => (
+        <article>
+          <span class={`control-symbol symbol-${index}`} aria-hidden="true"></span>
+          <div><h3>{control.title}</h3><p>{control.body}</p></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="png-route" aria-labelledby="png-route-title">
+  <div class="container route-shell">
+    <h2 id="png-route-title">{content.workflowHeading}</h2>
+    <ol>
+      {content.workflow.map((step, index) => (
+        <li>
+          <span>{index + 1}</span>
+          <div><h3>{step.title}</h3><p>{step.body}</p></div>
+          {index < content.workflow.length - 1 && <i aria-hidden="true"></i>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="png-size" aria-labelledby="png-size-title">
+  <div class="container size-shell">
+    <div class="transparency-copy">
+      <h2 id="png-size-title">{content.transparencyHeading}</h2>
+      <p>{content.transparencyBody}</p>
+      <div class="alpha-sample" aria-hidden="true"><span></span><i></i></div>
+    </div>
+
+    <div class="size-factors">
+      <header><h3>{content.batchHeading}</h3><p>{content.batchBody}</p></header>
+      <ul>
+        {content.sizeFactors.map((factor, index) => (
+          <li>
+            <div><strong>{factor.title}</strong><span>{factor.body}</span></div>
+            <i aria-hidden="true"><b style={`--bar:${90 - index * 22}%`}></b></i>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <aside>
+      <h3>{content.localHeading}</h3>
+      <p>{content.localBody}</p>
+      <ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .png-lab,
+  .png-route,
+  .png-size {
+    padding: 80px 0;
+  }
+
+  .lab-layout > header {
+    max-width: 680px;
+  }
+
+  .lab-layout header p,
+  .palette-controls p,
+  .route-shell p,
+  .transparency-copy p,
+  .size-factors p,
+  .size-factors li span,
+  .size-shell aside p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .palette-workbench {
+    display: grid;
+    grid-template-columns: 1fr 190px;
+    margin-top: 48px;
+    border: 2px solid var(--text);
+  }
+
+  .palette-preview {
+    min-height: 250px;
+    padding: 26px;
+  }
+
+  .checker {
+    display: grid;
+    height: 150px;
+    place-items: center;
+    background-color: #fff;
+    background-image: linear-gradient(45deg, var(--rule) 25%, transparent 25%), linear-gradient(-45deg, var(--rule) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--rule) 75%), linear-gradient(-45deg, transparent 75%, var(--rule) 75%);
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+    background-size: 24px 24px;
+  }
+
+  .checker span {
+    display: block;
+    width: 52%;
+    height: 58%;
+    background: var(--brand);
+    clip-path: polygon(0 100%, 0 52%, 24% 27%, 43% 48%, 68% 16%, 100% 48%, 100% 100%);
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    height: 28px;
+    margin-top: 18px;
+  }
+
+  .swatches i {
+    background: var(--brand);
+  }
+
+  .swatches i:nth-child(2n) { background: var(--text); }
+  .swatches i:nth-child(3n) { background: var(--muted); }
+  .swatches i:nth-child(4n) { background: var(--surface); }
+
+  .palette-readout {
+    display: grid;
+    border-left: 1px solid var(--text);
+  }
+
+  .palette-readout span {
+    display: grid;
+    align-content: center;
+    padding: 20px;
+  }
+
+  .palette-readout span + span {
+    border-top: 1px solid var(--rule);
+  }
+
+  .palette-readout small,
+  .palette-readout strong {
+    display: block;
+  }
+
+  .palette-readout small {
+    color: var(--muted);
+  }
+
+  .palette-readout strong {
+    margin-top: 4px;
+    font-size: 24px;
+  }
+
+  .palette-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    margin-top: 42px;
+  }
+
+  .palette-controls article {
+    min-width: 0;
+  }
+
+  .control-symbol {
+    display: block;
+    width: 100%;
+    height: 8px;
+    margin-bottom: 22px;
+    background: repeating-linear-gradient(90deg, var(--brand) 0 18px, var(--text) 18px 36px);
+  }
+
+  .symbol-1 {
+    background: linear-gradient(90deg, transparent, var(--brand));
+  }
+
+  .symbol-2 {
+    background: repeating-linear-gradient(135deg, var(--brand) 0 3px, transparent 3px 8px);
+  }
+
+  .palette-controls h3 {
+    margin-bottom: 8px;
+  }
+
+  .route-shell > h2 {
+    max-width: 620px;
+  }
+
+  .route-shell ol {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px;
+    padding: 0;
+    margin: 48px 0 0;
+    list-style: none;
+  }
+
+  .route-shell li {
+    position: relative;
+  }
+
+  .route-shell li > span {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    margin-bottom: 22px;
+    background: var(--text);
+    color: #fff;
+    font-weight: 900;
+  }
+
+  .route-shell li > i {
+    position: absolute;
+    top: 21px;
+    left: 58px;
+    width: calc(100% - 22px);
+    border-top: 2px dotted var(--brand);
+  }
+
+  .route-shell h3 {
+    margin-bottom: 8px;
+  }
+
+  .size-shell {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 72px;
+  }
+
+  .alpha-sample {
+    position: relative;
+    width: 180px;
+    height: 110px;
+    margin-top: 32px;
+    background-image: linear-gradient(45deg, var(--rule) 25%, transparent 25%), linear-gradient(-45deg, var(--rule) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--rule) 75%), linear-gradient(-45deg, transparent 75%, var(--rule) 75%);
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    background-size: 20px 20px;
+  }
+
+  .alpha-sample span,
+  .alpha-sample i {
+    position: absolute;
+    width: 66px;
+    height: 66px;
+    background: var(--brand);
+  }
+
+  .alpha-sample span { top: 14px; left: 24px; }
+  .alpha-sample i { right: 24px; bottom: 14px; opacity: 0.45; }
+
+  .size-factors header h3 {
+    margin-bottom: 8px;
+  }
+
+  .size-factors ul,
+  .size-shell aside ul {
+    padding: 0;
+    margin: 30px 0 0;
+    list-style: none;
+  }
+
+  .size-factors li {
+    padding-bottom: 24px;
+  }
+
+  .size-factors li div {
+    display: grid;
+    gap: 5px;
+  }
+
+  .size-factors li > i {
+    display: block;
+    height: 6px;
+    margin-top: 12px;
+    background: var(--surface);
+  }
+
+  .size-factors li > i b {
+    display: block;
+    width: var(--bar);
+    height: 100%;
+    background: var(--brand);
+  }
+
+  .size-shell aside {
+    grid-column: 1 / -1;
+    padding-left: 22px;
+    border-left: 4px solid var(--brand);
+  }
+
+  .size-shell aside ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 16px;
+    font-weight: 750;
+  }
+
+  @media (max-width: 760px) {
+    .png-lab,
+    .png-route,
+    .png-size {
+      padding: 64px 0;
+    }
+
+    .palette-workbench,
+    .palette-controls,
+    .route-shell ol,
+    .size-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .palette-readout {
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--text);
+      border-left: 0;
+    }
+
+    .palette-readout span + span {
+      border-top: 0;
+      border-left: 1px solid var(--rule);
+    }
+
+    .palette-controls,
+    .route-shell ol {
+      gap: 30px;
+    }
+
+    .route-shell li {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .route-shell li > i {
+      display: none;
+    }
+
+    .size-shell {
+      gap: 44px;
+    }
+
+    .size-shell aside {
+      grid-column: 1;
+    }
+  }
+</style>

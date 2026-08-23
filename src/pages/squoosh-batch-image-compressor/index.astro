@@ -9,7 +9,7 @@ const canonical = 'https://vicoco.uk/app/squoosh-batch-image-compressor/';
 const title = 'Squoosh Batch Image Compressor - Compress Images in Bulk';
 const description =
   'Use Vicoco as a Squoosh batch image compressor to compress images in bulk and batch convert JPEG, PNG, WebP and AVIF files privately in your browser.';
-const image = `${canonical}assets/vicoco-editor.webp`;
+const image = 'https://vicoco.uk/app/assets/vicoco-editor.webp';
 
 const faqItems = [
   {
@@ -252,5 +252,12 @@ const structuredData = {
     </section>
   </main>
 
-  <SiteFooter />
+  <SiteFooter
+    relatedLinks={[
+      { label: 'PNG to WebP Converter', href: '/app/png-to-webp-converter/' },
+      { label: 'Image Size Checker', href: '/app/image-size-checker/' },
+      { label: 'Image Stretcher', href: '/app/image-stretcher/' },
+      { label: 'Kompres Foto', href: '/app/id/kompres-foto/' },
+    ]}
+  />
 </BaseLayout>

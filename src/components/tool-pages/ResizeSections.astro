@@ -1,0 +1,331 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'resize' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+const dimensionMarks = ['W', 'H', 'W:H'];
+---
+
+<section class="resize-stage" aria-labelledby="resize-stage-title">
+  <div class="container">
+    <div class="resize-copy">
+      <h2 id="resize-stage-title">{content.dimensionHeading}</h2>
+      <p>{content.dimensionBody}</p>
+    </div>
+
+    <div class="dimension-demo" aria-label={content.dimensionHeading}>
+      <div class="canvas canvas-original">
+        <span>1200 × 800</span>
+        <div></div>
+      </div>
+      <div class="dimension-controls" aria-hidden="true">
+        <span>W&nbsp; 1600 px</span>
+        <b>×</b>
+        <span>H&nbsp; 600 px</span>
+        <i>⌁</i>
+      </div>
+      <div class="canvas canvas-result">
+        <span>1600 × 600</span>
+        <div></div>
+      </div>
+    </div>
+
+    <div class="dimension-legend">
+      {content.dimensions.map((item, index) => (
+        <article><span>{dimensionMarks[index] ?? 'PX'}</span><div><h3>{item.title}</h3><p>{item.body}</p></div></article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="resize-methods" aria-labelledby="resize-methods-title">
+  <div class="container methods-shell">
+    <header>
+      <h2 id="resize-methods-title">{content.methodHeading}</h2>
+      <p>{content.previewBody}</p>
+    </header>
+    <div class="method-comparison">
+      {content.methods.map((method, index) => (
+        <article>
+          <div class={`shape shape-${index}`} aria-hidden="true"><i></i></div>
+          <span>0{index + 1}</span>
+          <h3>{method.title}</h3>
+          <p>{method.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="resize-rules" aria-labelledby="resize-rules-title">
+  <div class="container rules-shell">
+    <div class="rule-title">
+      <h2 id="resize-rules-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+    </div>
+    <ol>
+      {content.batchRules.map((rule, index) => (
+        <li><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{rule.title}</h3><p>{rule.body}</p></div></li>
+      ))}
+    </ol>
+    <aside>
+      <div><h3>{content.previewHeading}</h3><p>{content.previewBody}</p></div>
+      <div><h3>{content.localHeading}</h3><p>{content.localBody}</p></div>
+      <ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .resize-stage,
+  .resize-methods,
+  .resize-rules {
+    padding: 80px 0;
+  }
+
+  .resize-copy,
+  .methods-shell > header {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
+  .resize-copy p,
+  .dimension-legend p,
+  .methods-shell header p,
+  .method-comparison p,
+  .rule-title p,
+  .rules-shell ol p,
+  .rules-shell aside p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .dimension-demo {
+    display: grid;
+    grid-template-columns: 1fr 190px 1fr;
+    gap: 32px;
+    align-items: center;
+    margin-top: 52px;
+  }
+
+  .canvas > span {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .canvas > div {
+    position: relative;
+    width: 100%;
+    border: 2px solid var(--text);
+  }
+
+  .canvas > div::before,
+  .canvas > div::after {
+    position: absolute;
+    background: var(--brand);
+    content: '';
+  }
+
+  .canvas > div::before {
+    inset: 18% 22%;
+  }
+
+  .canvas > div::after {
+    right: 12%;
+    bottom: 12%;
+    width: 18%;
+    height: 22%;
+    background: var(--text);
+  }
+
+  .canvas-original > div {
+    aspect-ratio: 3 / 2;
+  }
+
+  .canvas-result > div {
+    aspect-ratio: 8 / 3;
+  }
+
+  .dimension-controls {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dimension-controls span {
+    padding: 10px 8px;
+    border: 1px solid var(--text);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .dimension-controls i {
+    grid-column: 1 / -1;
+    color: var(--brand-text);
+    font-size: 24px;
+    font-style: normal;
+    text-align: center;
+  }
+
+  .dimension-legend {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin: 48px auto 0;
+  }
+
+  .dimension-legend article {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .dimension-legend article > span {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border: 2px solid var(--brand);
+    color: var(--brand-text);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .dimension-legend h3,
+  .method-comparison h3,
+  .rules-shell ol h3 {
+    margin-bottom: 8px;
+  }
+
+  .methods-shell > header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .method-comparison {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .shape {
+    display: grid;
+    height: 150px;
+    place-items: center;
+    margin-bottom: 24px;
+    border: 1px solid var(--rule);
+  }
+
+  .shape i {
+    display: block;
+    width: 62%;
+    height: 62%;
+    border: 2px solid var(--text);
+    background: var(--brand);
+  }
+
+  .shape-1 i {
+    width: 84%;
+    height: 46%;
+  }
+
+  .shape-2 i {
+    width: 46%;
+    height: 84%;
+  }
+
+  .method-comparison article > span {
+    color: var(--brand-text);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .rule-title {
+    max-width: 620px;
+  }
+
+  .rules-shell > ol {
+    padding: 0;
+    margin: 44px 0 0;
+    list-style: none;
+  }
+
+  .rules-shell > ol > li {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 24px;
+    padding-bottom: 30px;
+  }
+
+  .rules-shell > ol > li > span {
+    color: var(--brand-text);
+    font-size: 24px;
+    font-weight: 900;
+  }
+
+  .rules-shell aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 56px;
+    margin-top: 28px;
+    padding-left: 22px;
+    border-left: 4px solid var(--brand);
+  }
+
+  .rules-shell aside ul {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    gap: 8px 22px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 750;
+  }
+
+  @media (max-width: 760px) {
+    .resize-stage,
+    .resize-methods,
+    .resize-rules {
+      padding: 64px 0;
+    }
+
+    .dimension-demo,
+    .dimension-legend,
+    .methods-shell > header,
+    .method-comparison,
+    .rules-shell aside {
+      grid-template-columns: 1fr;
+    }
+
+    .dimension-demo {
+      gap: 24px;
+    }
+
+    .dimension-controls {
+      max-width: 220px;
+      margin-inline: auto;
+    }
+
+    .dimension-legend,
+    .method-comparison {
+      gap: 28px;
+    }
+
+    .rules-shell aside ul {
+      grid-column: 1;
+    }
+  }
+</style>

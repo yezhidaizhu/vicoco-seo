@@ -3,9 +3,47 @@ interface Props {
   titleLines: string[];
   description: string;
   source: string;
+  labels?: {
+    dropBeforePaste?: string;
+    dropAfterPaste?: string;
+    paste?: string;
+    pasteAriaLabel?: string;
+    chooseImages?: string;
+    moreOptionsAriaLabel?: string;
+    chooseFolder?: string;
+    formats?: string;
+    invalidFiles?: string;
+    preparing?: string;
+    imageSingular?: string;
+    imagePlural?: string;
+    editorError?: string;
+    clipboardUnavailable?: string;
+    clipboardBlocked?: string;
+  };
 }
 
-const { titleLines, description, source } = Astro.props;
+const { titleLines, description, source, labels = {} } = Astro.props;
+const copy = {
+  dropBeforePaste: labels.dropBeforePaste ?? 'Drop images or folders here, or ',
+  dropAfterPaste: labels.dropAfterPaste ?? ', or click to choose',
+  paste: labels.paste ?? 'Paste',
+  pasteAriaLabel: labels.pasteAriaLabel ?? 'Paste images from clipboard',
+  chooseImages: labels.chooseImages ?? 'Choose Images',
+  moreOptionsAriaLabel: labels.moreOptionsAriaLabel ?? 'More upload options',
+  chooseFolder: labels.chooseFolder ?? 'Choose Folder',
+  formats: labels.formats ?? 'JPEG, PNG, WebP, AVIF, SVG & more',
+  invalidFiles: labels.invalidFiles ?? 'Choose image files only.',
+  preparing: labels.preparing ?? 'Preparing',
+  imageSingular: labels.imageSingular ?? 'image',
+  imagePlural: labels.imagePlural ?? 'images',
+  editorError: labels.editorError ?? 'Could not open the editor. Please try again.',
+  clipboardUnavailable:
+    labels.clipboardUnavailable ??
+    'Clipboard access is unavailable. Press Ctrl or Cmd + V instead.',
+  clipboardBlocked:
+    labels.clipboardBlocked ??
+    'Clipboard access was blocked. Press Ctrl or Cmd + V instead.',
+};
 ---
 
 <section class="hero" id="top" aria-labelledby="page-title" data-upload-root>
@@ -29,6 +67,13 @@ const { titleLines, description, source } = Astro.props;
       class="upload-stage"
       data-uploader
       data-source={source}
+      data-invalid-files={copy.invalidFiles}
+      data-preparing={copy.preparing}
+      data-image-singular={copy.imageSingular}
+      data-image-plural={copy.imagePlural}
+      data-editor-error={copy.editorError}
+      data-clipboard-unavailable={copy.clipboardUnavailable}
+      data-clipboard-blocked={copy.clipboardBlocked}
       aria-describedby="upload-status"
     >
       <div class="upload-inner">
@@ -50,23 +95,23 @@ const { titleLines, description, source } = Astro.props;
           }
         </h1>
         <p class="upload-copy">
-          Drop images or folders here, or{' '}
+          {copy.dropBeforePaste}
           <button
             class="paste-button"
             data-paste
             type="button"
-            aria-label="Paste images from clipboard"
-          >Paste</button>, or click to choose
+            aria-label={copy.pasteAriaLabel}
+          >{copy.paste}</button>{copy.dropAfterPaste}
         </p>
         <div class="upload-actions">
           <button class="upload-action upload-action-primary" data-choose-images type="button">
-            Choose Images
+            {copy.chooseImages}
           </button>
           <button
             class="upload-action upload-action-secondary"
             data-upload-options
             type="button"
-            aria-label="More upload options"
+            aria-label={copy.moreOptionsAriaLabel}
             aria-expanded="false"
             aria-haspopup="true"
             aria-controls="folder-upload-menu"
@@ -84,12 +129,12 @@ const { titleLines, description, source } = Astro.props;
             </svg>
           </button>
           <div class="upload-menu" id="folder-upload-menu" data-folder-menu hidden>
-            <button data-folder type="button">Choose Folder</button>
+            <button data-folder type="button">{copy.chooseFolder}</button>
           </div>
         </div>
       </div>
       <span class="upload-status" id="upload-status" data-status role="status" aria-live="polite">
-        JPEG, PNG, WebP, AVIF, SVG &amp; more
+        {copy.formats}
       </span>
     </div>
     <p class="hero-description">{description}</p>
@@ -127,6 +172,20 @@ const { titleLines, description, source } = Astro.props;
   const pasteButton = uploader?.querySelector<HTMLButtonElement>('[data-paste]');
   const status = uploader?.querySelector<HTMLElement>('[data-status]');
   const source = uploader?.dataset.source || 'seo';
+  const isChecker = source === 'image-size-checker';
+  const labels = {
+    invalidFiles: uploader?.dataset.invalidFiles || 'Choose image files only.',
+    preparing: uploader?.dataset.preparing || 'Preparing',
+    imageSingular: uploader?.dataset.imageSingular || 'image',
+    imagePlural: uploader?.dataset.imagePlural || 'images',
+    editorError: uploader?.dataset.editorError || 'Could not open the editor. Please try again.',
+    clipboardUnavailable:
+      uploader?.dataset.clipboardUnavailable ||
+      'Clipboard access is unavailable. Press Ctrl or Cmd + V instead.',
+    clipboardBlocked:
+      uploader?.dataset.clipboardBlocked ||
+      'Clipboard access was blocked. Press Ctrl or Cmd + V instead.',
+  };
   let dragDepth = 0;
   if (folderInput) {
     (folderInput as HTMLInputElement & { webkitdirectory: boolean }).webkitdirectory = true;
@@ -149,6 +208,13 @@ const { titleLines, description, source } = Astro.props;
     if (optionsButton) optionsButton.disabled = state === 'busy';
     if (folderButton) folderButton.disabled = state === 'busy';
   };
+  window.addEventListener('vicoco:checker-status', (event) => {
+    const detail = (event as CustomEvent<{
+      message: string;
+      state?: 'idle' | 'busy' | 'error';
+    }>).detail;
+    setStatus(detail.message, detail.state);
+  });
 
   const isImage = (file: File) =>
     file.type.startsWith('image/') || /\.svg$/i.test(file.name);
@@ -195,25 +261,41 @@ const { titleLines, description, source } = Astro.props;
     }
   };
 
-  const handoff = async (incoming: File[]) => {
-    const files = incoming.filter(isImage);
-    if (files.length === 0) {
-      setStatus('Choose image files only.', 'error');
-      return;
-    }
-
+  const transferToEditor = async (files: File[], transferSource = source) => {
     setFolderMenu(false);
-    setStatus(`Preparing ${files.length} ${files.length === 1 ? 'image' : 'images'}...`, 'busy');
+    setStatus(
+      `${labels.preparing} ${files.length} ${
+        files.length === 1 ? labels.imageSingular : labels.imagePlural
+      }...`,
+      'busy',
+    );
     try {
       const id = await saveTransfer(files);
       const destination = new URL('/handoff', window.location.origin);
       destination.searchParams.set('handoff', id);
-      destination.searchParams.set('source', source);
+      destination.searchParams.set('source', transferSource);
       window.location.assign(destination);
     } catch (error) {
       console.error(error);
-      setStatus('Could not open the editor. Please try again.', 'error');
+      setStatus(labels.editorError, 'error');
     }
+  };
+
+  const handoff = async (incoming: File[]) => {
+    const files = incoming.filter(isImage);
+    if (files.length === 0) {
+      setStatus(labels.invalidFiles, 'error');
+      return;
+    }
+
+    setFolderMenu(false);
+    if (isChecker) {
+      window.dispatchEvent(
+        new CustomEvent('vicoco:checker-files', { detail: { files } }),
+      );
+      return;
+    }
+    await transferToEditor(files);
   };
 
   const readEntry = async (entry: LegacyFileEntry): Promise<File[]> => {
@@ -270,7 +352,6 @@ const { titleLines, description, source } = Astro.props;
     setFolderMenu(false);
     folderInput?.click();
   });
-
   fileInput?.addEventListener('change', () => {
     void handoff(Array.from(fileInput.files || []));
     fileInput.value = '';
@@ -283,7 +364,7 @@ const { titleLines, description, source } = Astro.props;
   pasteButton?.addEventListener('click', async (event) => {
     event.stopPropagation();
     if (!navigator.clipboard?.read) {
-      setStatus('Clipboard access is unavailable. Press Ctrl or Cmd + V instead.', 'error');
+      setStatus(labels.clipboardUnavailable, 'error');
       return;
     }
     try {
@@ -299,7 +380,7 @@ const { titleLines, description, source } = Astro.props;
       await handoff(files);
     } catch (error) {
       console.error(error);
-      setStatus('Clipboard access was blocked. Press Ctrl or Cmd + V instead.', 'error');
+      setStatus(labels.clipboardBlocked, 'error');
     }
   });
 
