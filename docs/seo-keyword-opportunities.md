@@ -39,9 +39,9 @@
 | 20 | `compress image to 100kb` | `seo-2.js` | 77.8K | 19 | 英语 | 将图片压缩到 100KB | ✓ | `/app/image-compressor-to-100kb/` |
 | 21 | `compress image to 200kb` | `seo-2.js` | 35.6K | 10 | 英语 | 将图片压缩到 200KB | ✓ | `/app/image-compressor-to-200kb/` |
 | 22 | `image compressor to 500kb` | `seo-2.js` | 7.1K | 1 | 英语 | 将图片压缩到 500KB | ✓ | `/app/image-compressor-to-500kb/` |
-| 23 | `jpg to jpeg` | `seo-2.js` | 100.5K | 21 | 英语 | JPG 转 JPEG |  | `/app/jpg-to-jpeg/` |
+| 23 | `jpg to jpeg` | `seo-2.js` | 100.5K | 21 | 英语 | JPG 转 JPEG | ✓ | `/app/jpg-to-jpeg/` |
 
-指定 KB 页面的功能前提已经满足；产品支持 JPEG、WebP 和 AVIF 自动压缩到目标大小。`jpg to jpeg` 页面仍需等待 `.jpeg` 扩展名导出。
+指定 KB 页面支持 JPEG、WebP 和 AVIF 自动压缩到目标大小。`jpg to jpeg` 页面通过交接预设输出 `.jpeg` 文件名。
 
 ## FAQ 长尾词
 

@@ -12,6 +12,7 @@
 | SEO 页面到编辑器的本地交接     |  ✓   | 图片通过浏览器 IndexedDB 交接，不上传服务器；实现见 [UploadHero.astro](../src/components/UploadHero.astro) |
 | 批量图片队列                   |  ✓   | 为多张图片复用同一套输出设置                                                                               |
 | JPEG、PNG、WebP、AVIF 稳定输出 |  ✓   | 压缩或转换为常用 Web 图片格式                                                                              |
+| `.jpeg` 扩展名导出             |  ✓   | JPG to JPEG 交接预设支持单图与批量 `.jpeg` 输出文件名                                                      |
 | PNG 转 WebP                    |  ✓   | 读取 PNG 并导出 `.webp`                                                                                    |
 | JPEG 与 PNG 压缩               |  ✓   | 使用对应编码器调整压缩设置                                                                                 |
 | 自定义像素宽高                 |  ✓   | 缩小、放大或拉伸图片尺寸                                                                                   |
@@ -32,8 +33,6 @@
 
 ## 未实现
 
-| 功能               | 状态 | 限制                                |
-| ------------------ | :--: | ----------------------------------- |
-| `.jpeg` 扩展名导出 |      | JPEG 编码结果统一使用 `.jpg` 扩展名 |
+当前没有与已规划 SEO 页面相关的未实现功能。
 
 未实现功能不得在 title、description、正文、FAQ、Open Graph 或 JSON-LD 中声明为现有能力。

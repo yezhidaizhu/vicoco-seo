@@ -30,6 +30,38 @@ const transparent: DemoAsset = {
   thumbnail: asset('transparent-thumb.png'),
 };
 
+const targetSizeDemo: DemoAsset = {
+  filename: 'target-size-demo.jpg',
+  mimeType: 'image/jpeg',
+  source: asset('target-size-demo.jpg'),
+  thumbnail: asset('target-size-demo-thumb.jpg'),
+};
+
+const target200Demo: DemoAsset = {
+  filename: 'target-200-demo.jpg',
+  mimeType: 'image/jpeg',
+  source: asset('target-200-demo.jpg'),
+  thumbnail: asset('target-200-demo-thumb.jpg'),
+};
+
+const target500Demo: DemoAsset = {
+  filename: 'target-500-demo.jpg',
+  mimeType: 'image/jpeg',
+  source: asset('target-500-demo.jpg'),
+  thumbnail: asset('target-500-demo-thumb.jpg'),
+};
+
+const targetSizeDemos: Record<string, DemoAsset[]> = {
+  'image-compressor-to-20kb': [targetSizeDemo],
+  'image-compressor-to-50kb': [targetSizeDemo],
+  'image-compressor-to-100kb': [artwork],
+  'image-compressor-to-200kb': [target200Demo],
+  'image-compressor-to-500kb': [target500Demo],
+};
+
+export const targetSizeDemoAssetsForPath = (path: string): DemoAsset[] =>
+  targetSizeDemos[path] ?? [];
+
 export const allDemoAssets = [photo, artwork, transparent];
 
 export const demoAssetsForKind = (kind: ToolPageKind): DemoAsset[] => {

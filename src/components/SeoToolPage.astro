@@ -1,13 +1,22 @@
 ---
 import type { ToolPageData } from '../data/toolPages';
-import { demoAssetsForKind, demoCopyForLang } from '../data/demoAssets';
+import { demoAssetsForKind, demoCopyForLang, targetSizeDemoAssetsForPath } from '../data/demoAssets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CheckerSections from './tool-pages/CheckerSections.astro';
 import ConverterSections from './tool-pages/ConverterSections.astro';
+import EmailSignatureOptimizerSections from './tool-pages/EmailSignatureOptimizerSections.astro';
 import GeneralCompressorSections from './tool-pages/GeneralCompressorSections.astro';
+import ImageTo20KbSections from './tool-pages/ImageTo20KbSections.astro';
+import ImageTo50KbSections from './tool-pages/ImageTo50KbSections.astro';
+import ImageTo100KbSections from './tool-pages/ImageTo100KbSections.astro';
+import ImageTo200KbSections from './tool-pages/ImageTo200KbSections.astro';
+import ImageTo500KbSections from './tool-pages/ImageTo500KbSections.astro';
 import JpgCompressorSections from './tool-pages/JpgCompressorSections.astro';
+import JpgToJpegSections from './tool-pages/JpgToJpegSections.astro';
 import PngCompressorSections from './tool-pages/PngCompressorSections.astro';
 import ResizeSections from './tool-pages/ResizeSections.astro';
+import ShopifyImageOptimizerSections from './tool-pages/ShopifyImageOptimizerSections.astro';
+import TransparentPngCompressorSections from './tool-pages/TransparentPngCompressorSections.astro';
 import SiteFooter from './SiteFooter.astro';
 import SiteHeader from './SiteHeader.astro';
 import UploadHero from './UploadHero.astro';
@@ -20,8 +29,28 @@ interface Props {
 const { page } = Astro.props;
 const canonical = `https://vicoco.uk/app/${page.path}/`;
 const image = 'https://vicoco.uk/app/assets/vicoco-editor.webp';
-const demos = demoAssetsForKind(page.kind);
+const targetSizePaths = new Set([
+  'image-compressor-to-20kb',
+  'image-compressor-to-50kb',
+  'image-compressor-to-100kb',
+  'image-compressor-to-200kb',
+  'image-compressor-to-500kb',
+]);
+const demos = targetSizePaths.has(page.path)
+  ? targetSizeDemoAssetsForPath(page.path)
+  : demoAssetsForKind(page.path === 'jpg-to-jpeg' ? 'jpg-compressor' : page.kind);
 const uploadLabels = { ...page.uploadLabels, ...demoCopyForLang(page.lang) };
+const customSections = [
+  'shopify-image-optimizer',
+  'email-signature-image-optimizer',
+  'transparent-png-compressor',
+  'image-compressor-to-20kb',
+  'image-compressor-to-50kb',
+  'image-compressor-to-100kb',
+  'image-compressor-to-200kb',
+  'image-compressor-to-500kb',
+  'jpg-to-jpeg',
+].includes(page.path);
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -88,12 +117,22 @@ const structuredData = {
 
     {page.kind === 'checker' && <ImageCheckerResults />}
 
-    {page.kind === 'converter' && <ConverterSections {page} />}
-    {page.kind === 'checker' && <CheckerSections {page} />}
-    {page.kind === 'resize' && <ResizeSections {page} />}
-    {page.kind === 'general-compressor' && <GeneralCompressorSections {page} />}
-    {page.kind === 'jpg-compressor' && <JpgCompressorSections {page} />}
-    {page.kind === 'png-compressor' && <PngCompressorSections {page} />}
+    {page.path === 'shopify-image-optimizer' && page.kind === 'general-compressor' && <ShopifyImageOptimizerSections {page} />}
+    {page.path === 'email-signature-image-optimizer' && page.kind === 'resize' && <EmailSignatureOptimizerSections {page} />}
+    {page.path === 'transparent-png-compressor' && page.kind === 'png-compressor' && <TransparentPngCompressorSections {page} />}
+    {page.path === 'image-compressor-to-20kb' && page.kind === 'general-compressor' && <ImageTo20KbSections {page} />}
+    {page.path === 'image-compressor-to-50kb' && page.kind === 'general-compressor' && <ImageTo50KbSections {page} />}
+    {page.path === 'image-compressor-to-100kb' && page.kind === 'general-compressor' && <ImageTo100KbSections {page} />}
+    {page.path === 'image-compressor-to-200kb' && page.kind === 'general-compressor' && <ImageTo200KbSections {page} />}
+    {page.path === 'image-compressor-to-500kb' && page.kind === 'general-compressor' && <ImageTo500KbSections {page} />}
+    {page.path === 'jpg-to-jpeg' && page.kind === 'converter' && <JpgToJpegSections {page} />}
+
+    {!customSections && page.kind === 'converter' && <ConverterSections {page} />}
+    {!customSections && page.kind === 'checker' && <CheckerSections {page} />}
+    {!customSections && page.kind === 'resize' && <ResizeSections {page} />}
+    {!customSections && page.kind === 'general-compressor' && <GeneralCompressorSections {page} />}
+    {!customSections && page.kind === 'jpg-compressor' && <JpgCompressorSections {page} />}
+    {!customSections && page.kind === 'png-compressor' && <PngCompressorSections {page} />}
 
     <section class="faq" aria-labelledby="faq-heading">
       <div class="container faq-layout faq-layout-tool">
@@ -109,21 +148,23 @@ const structuredData = {
       </div>
     </section>
 
-    <section class="final-cta" aria-labelledby="cta-heading">
-      <div class="container final-cta-inner">
-        <h2 id="cta-heading">{page.ctaHeading}</h2>
-        <p>{page.ctaBody}</p>
-        <button class="button-primary final-cta-button" data-choose-images type="button">
-          <span class="final-cta-label">{page.ctaButton}</span>
-          <span class="final-cta-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="m13 6 6 6-6 6"></path>
-            </svg>
-          </span>
-        </button>
-      </div>
-    </section>
+    {!customSections && (
+      <section class="final-cta" aria-labelledby="cta-heading">
+        <div class="container final-cta-inner">
+          <h2 id="cta-heading">{page.ctaHeading}</h2>
+          <p>{page.ctaBody}</p>
+          <button class="button-primary final-cta-button" data-choose-images type="button">
+            <span class="final-cta-label">{page.ctaButton}</span>
+            <span class="final-cta-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </section>
+    )}
   </main>
 
   <SiteFooter relatedLinks={page.relatedLinks} labels={page.footerLabels} />

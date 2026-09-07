@@ -1,0 +1,425 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'resize' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="signature-preview" aria-labelledby="signature-preview-title">
+  <div class="container signature-preview-layout">
+    <div class="preview-copy">
+      <h2 id="signature-preview-title">{content.dimensionHeading}</h2>
+      <p>{content.dimensionBody}</p>
+      <dl>
+        {content.dimensions.map((item, index) => (
+          <div><dt><span>{['W', 'H', 'R'][index] ?? 'PX'}</span>{item.title}</dt><dd>{item.body}</dd></div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="mail-window" aria-label="Email signature image preview">
+      <div class="mail-toolbar" aria-hidden="true"><i></i><i></i><i></i><span>New message</span></div>
+      <div class="mail-fields"><span>To</span><span>Subject</span></div>
+      <div class="mail-body">
+        <p>Best regards,</p>
+        <div class="signature-block">
+          <div class="signature-mark" aria-hidden="true"><span>V</span></div>
+          <div><strong>Alex Morgan</strong><small>Product team</small><small>vicoco.uk</small></div>
+        </div>
+        <div class="dimension-rule"><span>600 px</span><i></i><span>200 px</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="signature-method" aria-labelledby="signature-method-title">
+  <div class="container">
+    <header>
+      <h2 id="signature-method-title">{content.methodHeading}</h2>
+      <p>{content.previewBody}</p>
+    </header>
+    <ol>
+      {content.methods.map((method, index) => (
+        <li>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <div><h3>{method.title}</h3><p>{method.body}</p></div>
+          <i aria-hidden="true"></i>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="signature-team" aria-labelledby="signature-team-title">
+  <div class="container team-layout">
+    <div>
+      <h2 id="signature-team-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+    </div>
+    <div class="team-table" role="table" aria-label="Email signature batch rules">
+      <div class="team-table-head" role="row"><span role="columnheader">Rule</span><span role="columnheader">Purpose</span></div>
+      {content.batchRules.map((rule, index) => (
+        <div class="team-table-row" role="row">
+          <span role="cell"><b>{String(index + 1).padStart(2, '0')}</b>{rule.title}</span>
+          <span role="cell">{rule.body}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="signature-check" aria-labelledby="signature-check-title">
+  <div class="container check-layout">
+    <div>
+      <h2 id="signature-check-title">{content.previewHeading}</h2>
+      <p>{content.previewBody}</p>
+    </div>
+    <aside>
+      <h3>{content.localHeading}</h3>
+      <p>{content.localBody}</p>
+      <ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul>
+    </aside>
+  </div>
+</section>
+
+<section class="signature-cta" aria-labelledby="signature-cta-title">
+  <div class="container signature-cta-layout">
+    <div><h2 id="signature-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div>
+    <button class="button-primary" data-choose-images type="button">{page.ctaButton}</button>
+  </div>
+</section>
+
+<style>
+  .signature-preview,
+  .signature-method,
+  .signature-team,
+  .signature-check,
+  .signature-cta {
+    padding: 80px 0;
+  }
+
+  .signature-preview-layout,
+  .team-layout,
+  .check-layout,
+  .signature-cta-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: 72px;
+    align-items: center;
+  }
+
+  .preview-copy > p:last-of-type,
+  .signature-method header > p:last-child,
+  .signature-method li p,
+  .signature-team p,
+  .signature-check p,
+  .signature-cta p,
+  .preview-copy dd,
+  .team-table-row > span:last-child {
+    color: var(--muted);
+  }
+
+  .preview-copy dl {
+    margin: 32px 0 0;
+  }
+
+  .preview-copy dl > div {
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .preview-copy dt {
+    font-weight: 800;
+  }
+
+  .preview-copy dt span {
+    display: inline-grid;
+    width: 30px;
+    height: 30px;
+    margin-right: 12px;
+    place-items: center;
+    border: 1px solid var(--text);
+    color: var(--brand-text);
+    font-size: 10px;
+  }
+
+  .preview-copy dd {
+    margin: 8px 0 0 42px;
+  }
+
+  .mail-window {
+    border: 2px solid var(--text);
+    background: var(--page);
+    box-shadow: 12px 12px 0 var(--surface);
+  }
+
+  .mail-toolbar {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--text);
+  }
+
+  .mail-toolbar i {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--text);
+    border-radius: 50%;
+  }
+
+  .mail-toolbar span {
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .mail-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-inline: 20px;
+  }
+
+  .mail-fields span {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .mail-body {
+    min-height: 330px;
+    padding: 36px 28px 28px;
+  }
+
+  .mail-body > p {
+    margin: 0 0 28px;
+    color: var(--muted);
+  }
+
+  .signature-block {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+    max-width: 390px;
+    padding-top: 20px;
+    border-top: 2px solid var(--brand);
+  }
+
+  .signature-mark {
+    display: grid;
+    aspect-ratio: 1;
+    place-items: center;
+    background: var(--brand);
+    color: var(--on-brand);
+    font-size: 32px;
+    font-weight: 900;
+  }
+
+  .signature-block strong,
+  .signature-block small {
+    display: block;
+  }
+
+  .signature-block small {
+    color: var(--muted);
+  }
+
+  .dimension-rule {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    margin-top: 30px;
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .dimension-rule i {
+    border-top: 1px dashed var(--muted);
+  }
+
+  .signature-method {
+    background: var(--surface);
+  }
+
+  .signature-method header {
+    max-width: 720px;
+  }
+
+  .signature-method ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0;
+    margin: 48px 0 0;
+    list-style: none;
+  }
+
+  .signature-method li {
+    position: relative;
+    min-height: 260px;
+    padding: 28px;
+    border-top: 2px solid var(--text);
+  }
+
+  .signature-method li + li {
+    border-left: 1px solid var(--rule);
+  }
+
+  .signature-method li > span {
+    color: var(--brand-text);
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .signature-method li h3 {
+    margin-top: 56px;
+  }
+
+  .signature-method li i {
+    position: absolute;
+    top: 34px;
+    right: 28px;
+    width: 48px;
+    height: 32px;
+    border: 2px solid var(--text);
+  }
+
+  .signature-method li:nth-child(2) i {
+    width: 38px;
+    height: 38px;
+  }
+
+  .signature-method li:nth-child(3) i {
+    width: 52px;
+    height: 24px;
+    border-color: var(--brand);
+  }
+
+  .team-layout {
+    align-items: start;
+  }
+
+  .team-table {
+    border: 2px solid var(--text);
+  }
+
+  .team-table-head,
+  .team-table-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .team-table-head {
+    background: var(--text);
+    color: var(--page);
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .team-table-head span,
+  .team-table-row > span {
+    padding: 18px 20px;
+  }
+
+  .team-table-row + .team-table-row {
+    border-top: 1px solid var(--rule);
+  }
+
+  .team-table-row > span + span,
+  .team-table-head span + span {
+    border-left: 1px solid var(--rule);
+  }
+
+  .team-table-row b {
+    margin-right: 12px;
+    color: var(--brand-text);
+    font-size: 11px;
+  }
+
+  .signature-check {
+    background: var(--surface);
+  }
+
+  .signature-check aside {
+    padding: 28px;
+    border: 2px solid var(--text);
+    background: var(--page);
+  }
+
+  .signature-check aside ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+
+  .signature-cta-layout {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .signature-cta .button-primary {
+    min-width: 240px;
+  }
+
+  @media (max-width: 820px) {
+    .signature-preview-layout,
+    .team-layout,
+    .check-layout,
+    .signature-cta-layout {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .signature-method ol {
+      grid-template-columns: 1fr;
+    }
+
+    .signature-method li {
+      min-height: 190px;
+    }
+
+    .signature-method li + li {
+      border-left: 0;
+    }
+
+    .signature-cta .button-primary {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .signature-preview,
+    .signature-method,
+    .signature-team,
+    .signature-check,
+    .signature-cta {
+      padding: 64px 0;
+    }
+
+    .mail-body {
+      min-height: 280px;
+      padding: 28px 18px;
+    }
+
+    .signature-block {
+      grid-template-columns: 64px minmax(0, 1fr);
+    }
+
+    .team-table-head,
+    .team-table-row {
+      grid-template-columns: 1fr;
+    }
+
+    .team-table-row > span + span,
+    .team-table-head span + span {
+      border-top: 1px solid var(--rule);
+      border-left: 0;
+    }
+  }
+</style>

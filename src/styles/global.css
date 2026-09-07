@@ -328,6 +328,8 @@ h3 {
 .upload-inner {
   position: relative;
   z-index: 1;
+  width: 100%;
+  min-width: 0;
   display: grid;
   justify-items: center;
 }
@@ -1178,10 +1180,26 @@ h3 {
 
   .upload-stage h1 {
     font-size: 36px;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   .upload-stage h1 span + span {
     margin-top: 10px;
+  }
+
+  .compressor-word {
+    white-space: normal;
+  }
+
+  .upload-actions {
+    max-width: 100%;
+  }
+
+  .upload-action-primary {
+    max-width: calc(100vw - 116px);
+    line-height: 1.2;
+    white-space: normal;
   }
 
   .upload-copy {

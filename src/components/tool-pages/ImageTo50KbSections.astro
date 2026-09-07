@@ -1,0 +1,101 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'general-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="fifty-target" aria-labelledby="fifty-target-title">
+  <div class="container target-layout">
+    <div>
+      <h2 id="fifty-target-title">{content.formatHeading}</h2>
+      <p>{content.formatBody}</p>
+      <dl>
+        {content.formats.map((item, index) => (
+          <div><dt><span>{index + 1}</span>{item.title}</dt><dd>{item.body}</dd></div>
+        ))}
+      </dl>
+    </div>
+    <div class="target-console" aria-label="50KB target result">
+      <div class="target-ring"><strong>50</strong><span>KB MAX</span></div>
+      <div class="target-readouts">
+        <span><small>RESULT</small><strong>48.7 KB</strong></span>
+        <span><small>QUALITY</small><strong>76</strong></span>
+        <span><small>RESIZE</small><strong>NOT USED</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fifty-process" aria-labelledby="fifty-process-title">
+  <div class="container">
+    <h2 id="fifty-process-title">{content.workflowHeading}</h2>
+    <ol>
+      {content.workflow.map((step, index) => (
+        <li><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="fifty-quality" aria-labelledby="fifty-quality-title">
+  <div class="container quality-layout">
+    <div class="quality-meter" aria-label="Quality before dimensions">
+      <div><span>QUALITY SEARCH</span><strong>100</strong><i><b></b></i><small>highest tested result under 50KB</small></div>
+      <div><span>RESIZE FALLBACK</span><strong>OPTIONAL</strong><i><b></b></i><small>enable it only when quality is not enough</small></div>
+    </div>
+    <div>
+      <h2 id="fifty-quality-title">{content.reviewHeading}</h2>
+      <p>{content.reviewBody}</p>
+    </div>
+  </div>
+</section>
+
+<section class="fifty-result" aria-labelledby="fifty-result-title">
+  <div class="container result-layout">
+    <div>
+      <h2 id="fifty-result-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+      <ul>{content.batchRules.map((item) => <li><h3>{item.title}</h3><p>{item.body}</p></li>)}</ul>
+    </div>
+    <aside>
+      <h3>{content.localHeading}</h3>
+      <p>{content.localBody}</p>
+      <ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul>
+    </aside>
+  </div>
+</section>
+
+<section class="fifty-cta" aria-labelledby="fifty-cta-title">
+  <div class="container cta-layout">
+    <div><h2 id="fifty-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div>
+    <button class="button-primary" data-choose-images type="button">{page.ctaButton}</button>
+  </div>
+</section>
+
+<style>
+  .fifty-target,.fifty-process,.fifty-quality,.fifty-result,.fifty-cta{padding:80px 0}
+  .target-layout,.quality-layout,.result-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:72px;align-items:center}
+  .fifty-target p,.fifty-target dd,.fifty-process p,.fifty-quality p,.fifty-result p,.fifty-cta p{color:var(--muted)}
+  .fifty-target dl{margin:32px 0 0}
+  .fifty-target dl>div{padding:18px 0;border-top:1px solid var(--rule)}
+  .fifty-target dt{font-weight:850}.fifty-target dt span{display:inline-grid;width:28px;height:28px;margin-right:12px;place-items:center;border:1px solid var(--text);color:var(--brand-text);font-size:11px}
+  .fifty-target dd{margin:7px 0 0 40px}
+  .target-console{display:grid;grid-template-columns:1fr 1fr;min-height:360px;border:2px solid var(--text)}
+  .target-ring{display:grid;align-content:center;justify-items:center;border-right:1px solid var(--text);background:var(--surface)}
+  .target-ring strong{font-size:96px;line-height:.9;color:var(--brand-text)}.target-ring span{margin-top:18px;font-size:12px;font-weight:900}
+  .target-readouts{display:grid}.target-readouts span{display:grid;align-content:center;padding:22px}.target-readouts span+span{border-top:1px solid var(--rule)}
+  .target-readouts small{color:var(--muted);font-size:10px}.target-readouts strong{font-size:20px}
+  .fifty-process{background:var(--surface)}.fifty-process h2{max-width:620px}.fifty-process ol{display:grid;grid-template-columns:repeat(3,1fr);padding:0;margin:44px 0 0;list-style:none;border-top:2px solid var(--text)}
+  .fifty-process li{padding:26px}.fifty-process li+li{border-left:1px solid var(--rule)}.fifty-process li>span{color:var(--brand-text);font-weight:900}.fifty-process h3{margin:28px 0 10px}
+  .quality-meter{border:2px solid var(--text)}.quality-meter>div{display:grid;grid-template-columns:1fr auto;gap:10px;padding:24px}.quality-meter>div+div{border-top:1px solid var(--text)}
+  .quality-meter span{font-size:11px;font-weight:850}.quality-meter strong{color:var(--brand-text)}.quality-meter i{grid-column:1/-1;height:8px;background:var(--surface)}.quality-meter i b{display:block;width:76%;height:100%;background:var(--brand)}.quality-meter>div+div i b{width:34%}.quality-meter small{grid-column:1/-1;color:var(--muted)}
+  .fifty-result ul{padding:0;margin:28px 0 0;list-style:none}.fifty-result li{display:grid;grid-template-columns:160px 1fr;gap:20px;padding:18px 0;border-top:1px solid var(--rule)}.fifty-result li h3,.fifty-result li p{margin:0}
+  .fifty-result aside{padding:32px;border:2px solid var(--text);box-shadow:10px 10px 0 var(--surface)}.fifty-result aside ul{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;padding-left:18px}
+  .fifty-cta{background:var(--surface)}.cta-layout{grid-template-columns:1fr auto}.fifty-cta p{margin-bottom:0}
+  @media(max-width:760px){.fifty-target,.fifty-process,.fifty-quality,.fifty-result,.fifty-cta{padding:64px 0}.target-layout,.quality-layout,.result-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.target-console{grid-template-columns:1fr;min-height:0}.target-ring{min-height:220px;border-right:0;border-bottom:1px solid var(--text)}.fifty-process ol{grid-template-columns:1fr}.fifty-process li+li{border-top:1px solid var(--rule);border-left:0}.fifty-result li{grid-template-columns:1fr;gap:6px}.cta-layout{justify-items:start}}
+</style>

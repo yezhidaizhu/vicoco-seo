@@ -1,0 +1,86 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'general-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="twenty-limit" aria-labelledby="twenty-limit-title">
+  <div class="container limit-layout">
+    <div>
+      <h2 id="twenty-limit-title">{content.formatHeading}</h2>
+      <p>{content.formatBody}</p>
+    </div>
+    <div class="compression-funnel" aria-label="Image reduction toward 20KB">
+      <div><span>SOURCE</span><strong>2.4 MB</strong></div>
+      <i aria-hidden="true"></i>
+      <div><span>QUALITY</span><strong>Q 42</strong></div>
+      <i aria-hidden="true"></i>
+      <div><span>RESULT</span><strong>19.8 KB</strong></div>
+    </div>
+  </div>
+  <div class="container factor-strip">
+    {content.formats.map((item, index) => (
+      <article><span>{['DETAIL','PIXELS','FORMAT'][index]}</span><h3>{item.title}</h3><p>{item.body}</p></article>
+    ))}
+  </div>
+</section>
+
+<section class="twenty-route" aria-labelledby="twenty-route-title">
+  <div class="container route-layout">
+    <h2 id="twenty-route-title">{content.workflowHeading}</h2>
+    <ol>
+      {content.workflow.map((step, index) => (
+        <li><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div><i aria-hidden="true"></i></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="twenty-format" aria-labelledby="twenty-format-title">
+  <div class="container format-layout">
+    <div>
+      <h2 id="twenty-format-title">{content.reviewHeading}</h2>
+      <p>{content.reviewBody}</p>
+    </div>
+    <div class="format-test" role="table" aria-label="Target format comparison">
+      <div role="row"><span role="columnheader">OUTPUT</span><span role="columnheader">TARGET</span><span role="columnheader">CHECK</span></div>
+      <div role="row"><strong role="cell">JPEG</strong><span role="cell">20 KB</span><b role="cell">READY</b></div>
+      <div role="row"><strong role="cell">WebP</strong><span role="cell">20 KB</span><b role="cell">COMPARE</b></div>
+      <div role="row"><strong role="cell">AVIF</strong><span role="cell">20 KB</span><b role="cell">COMPARE</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="twenty-result" aria-labelledby="twenty-result-title">
+  <div class="container result-layout">
+    <div>
+      <h2 id="twenty-result-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+      <div class="result-grid">{content.batchRules.map((item) => <article><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+    </div>
+    <aside><h3>{content.localHeading}</h3><p>{content.localBody}</p><ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul></aside>
+  </div>
+</section>
+
+<section class="twenty-cta" aria-labelledby="twenty-cta-title">
+  <div class="container cta-layout"><div><h2 id="twenty-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div><button class="button-primary" data-choose-images type="button">{page.ctaButton}</button></div>
+</section>
+
+<style>
+  .twenty-limit,.twenty-route,.twenty-format,.twenty-result,.twenty-cta{padding:80px 0}
+  .limit-layout,.route-layout,.format-layout,.result-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:72px;align-items:center}
+  .twenty-limit p,.twenty-route p,.twenty-format p,.twenty-result p,.twenty-cta p{color:var(--muted)}
+  .compression-funnel{display:grid;grid-template-columns:1fr 56px 1fr 56px 1fr;align-items:center}.compression-funnel>div{display:grid;min-height:160px;align-content:center;justify-items:center;border:2px solid var(--text);background:var(--page)}
+  .compression-funnel>div:last-child{background:var(--brand);color:var(--on-brand)}.compression-funnel span{font-size:10px;font-weight:900}.compression-funnel strong{font-size:22px}.compression-funnel i{height:2px;background:var(--text)}
+  .factor-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:2px solid var(--text)}.factor-strip article{padding:26px}.factor-strip article+article{border-left:1px solid var(--rule)}.factor-strip article>span{color:var(--brand-text);font-size:10px;font-weight:900}.factor-strip h3{margin:22px 0 10px}
+  .twenty-route{background:var(--surface)}.route-layout{align-items:start}.twenty-route ol{padding:0;margin:0;list-style:none}.twenty-route li{display:grid;grid-template-columns:44px 1fr 72px;gap:20px;align-items:center;padding:22px 0;border-top:1px solid var(--rule)}.twenty-route li>span{display:grid;width:36px;height:36px;place-items:center;border:1px solid var(--text);font-weight:900}.twenty-route h3,.twenty-route p{margin:0}.twenty-route h3{margin-bottom:8px}.twenty-route li>i{height:42px;border:2px solid var(--text);box-shadow:7px 7px 0 var(--brand)}
+  .format-test{border:2px solid var(--text)}.format-test>div{display:grid;grid-template-columns:1fr 1fr 1fr;padding:17px 20px}.format-test>div+div{border-top:1px solid var(--rule)}.format-test>div:first-child{background:var(--surface);font-size:10px;font-weight:900}.format-test b{color:var(--brand-text);font-size:11px}
+  .result-grid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:32px;border-top:2px solid var(--text)}.result-grid article{padding:22px 18px}.result-grid article+article{border-left:1px solid var(--rule)}.result-grid h3{font-size:18px}
+  .twenty-result aside{padding:32px;background:var(--surface);border-left:5px solid var(--brand)}.twenty-result aside ul{padding-left:18px}.twenty-cta{border-top:1px solid var(--rule)}.cta-layout{grid-template-columns:1fr auto}.twenty-cta p{margin-bottom:0}
+  @media(max-width:760px){.twenty-limit,.twenty-route,.twenty-format,.twenty-result,.twenty-cta{padding:64px 0}.limit-layout,.route-layout,.format-layout,.result-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.compression-funnel{grid-template-columns:1fr}.compression-funnel i{width:2px;height:28px;margin:auto}.factor-strip,.result-grid{grid-template-columns:1fr}.factor-strip article+article,.result-grid article+article{border-top:1px solid var(--rule);border-left:0}.cta-layout{justify-items:start}}
+</style>

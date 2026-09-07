@@ -1,0 +1,75 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'general-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="hundred-jpg" aria-labelledby="hundred-jpg-title">
+  <div class="container jpg-layout">
+    <div class="jpg-file" aria-label="JPG compressed under 100KB">
+      <div class="file-fold"></div>
+      <strong>JPG</strong>
+      <span>98.4 KB</span>
+      <i><b></b></i>
+      <small>100 KB MAXIMUM</small>
+    </div>
+    <div>
+      <h2 id="hundred-jpg-title">{content.formatHeading}</h2>
+      <p>{content.formatBody}</p>
+      <ul>{content.formats.map((item) => <li><h3>{item.title}</h3><p>{item.body}</p></li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="hundred-control" aria-labelledby="hundred-control-title">
+  <div class="container">
+    <h2 id="hundred-control-title">{content.reviewHeading}</h2>
+    <p>{content.reviewBody}</p>
+    <div class="control-grid">
+      <article><span>100</span><h3>Target limit</h3><p>The result aims to stay at or below 100KB.</p></article>
+      <article><span>Q</span><h3>Quality search</h3><p>The highest tested quality under the limit is retained.</p></article>
+      <article><span>PX</span><h3>Resize fallback</h3><p>Dimensions can change when quality alone is insufficient.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="hundred-steps" aria-labelledby="hundred-steps-title">
+  <div class="container steps-layout">
+    <h2 id="hundred-steps-title">{content.workflowHeading}</h2>
+    <ol>{content.workflow.map((step, index) => <li><span>0{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>)}</ol>
+  </div>
+</section>
+
+<section class="hundred-verify" aria-labelledby="hundred-verify-title">
+  <div class="container verify-layout">
+    <div>
+      <h2 id="hundred-verify-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+      <dl>{content.batchRules.map((item) => <div><dt>{item.title}</dt><dd>{item.body}</dd></div>)}</dl>
+    </div>
+    <aside><h3>{content.localHeading}</h3><p>{content.localBody}</p><ul>{content.localFacts.map((fact) => <li>{fact}</li>)}</ul></aside>
+  </div>
+</section>
+
+<section class="hundred-cta" aria-labelledby="hundred-cta-title">
+  <div class="container cta-layout"><div><h2 id="hundred-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div><button class="button-primary" data-choose-images type="button">{page.ctaButton}</button></div>
+</section>
+
+<style>
+  .hundred-jpg,.hundred-control,.hundred-steps,.hundred-verify,.hundred-cta{padding:80px 0}
+  .jpg-layout,.steps-layout,.verify-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:80px;align-items:center}
+  .hundred-jpg p,.hundred-control p,.hundred-steps p,.hundred-verify p,.hundred-cta p,.hundred-verify dd{color:var(--muted)}
+  .jpg-file{position:relative;min-height:390px;display:grid;align-content:center;justify-items:center;border:2px solid var(--text);background:var(--surface);overflow:hidden}.file-fold{position:absolute;top:-2px;right:-2px;width:88px;height:88px;border-left:2px solid var(--text);border-bottom:2px solid var(--text);background:var(--page);clip-path:polygon(100% 0,100% 100%,0 0)}
+  .jpg-file strong{font-size:72px;color:var(--brand-text)}.jpg-file>span{font-size:28px;font-weight:900}.jpg-file i{width:68%;height:10px;margin:26px 0 12px;background:var(--page);border:1px solid var(--text)}.jpg-file i b{display:block;width:98.4%;height:100%;background:var(--brand)}.jpg-file small{font-weight:850}
+  .hundred-jpg ul{padding:0;margin:28px 0 0;list-style:none}.hundred-jpg li{padding:16px 0;border-top:1px solid var(--rule)}.hundred-jpg h3,.hundred-jpg li p{margin:0}.hundred-jpg h3{margin-bottom:7px}
+  .hundred-control{background:var(--surface)}.hundred-control>.container>p{max-width:700px}.control-grid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:44px;border:2px solid var(--text);background:var(--page)}.control-grid article{padding:30px}.control-grid article+article{border-left:1px solid var(--text)}.control-grid article>span{display:grid;width:56px;height:56px;place-items:center;border:2px solid var(--text);color:var(--brand-text);font-weight:900}.control-grid h3{margin:34px 0 10px}
+  .steps-layout{align-items:start}.hundred-steps ol{padding:0;margin:0;list-style:none;border-top:2px solid var(--text)}.hundred-steps li{display:grid;grid-template-columns:62px 1fr;gap:24px;padding:25px 0;border-bottom:1px solid var(--rule)}.hundred-steps li>span{color:var(--brand-text);font-size:22px;font-weight:900}.hundred-steps h3{margin-bottom:8px}
+  .hundred-verify dl{margin:30px 0 0}.hundred-verify dl>div{display:grid;grid-template-columns:160px 1fr;gap:20px;padding:17px 0;border-top:1px solid var(--rule)}.hundred-verify dt{font-weight:850}.hundred-verify dd{margin:0}.hundred-verify aside{padding:34px;border:2px solid var(--text);box-shadow:12px 12px 0 var(--brand)}.hundred-verify aside ul{padding-left:18px}
+  .hundred-cta{background:var(--surface)}.cta-layout{grid-template-columns:1fr auto}.hundred-cta p{margin-bottom:0}
+  @media(max-width:760px){.hundred-jpg,.hundred-control,.hundred-steps,.hundred-verify,.hundred-cta{padding:64px 0}.jpg-layout,.steps-layout,.verify-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.jpg-file{min-height:310px}.control-grid{grid-template-columns:1fr}.control-grid article+article{border-top:1px solid var(--text);border-left:0}.hundred-verify dl>div{grid-template-columns:1fr;gap:6px}.cta-layout{justify-items:start}}
+</style>

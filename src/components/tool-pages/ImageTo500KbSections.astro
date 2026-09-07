@@ -1,0 +1,71 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'general-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+const pixels = Array.from({ length: 48 });
+---
+
+<section class="fivehundred-detail" aria-labelledby="fivehundred-detail-title">
+  <div class="container detail-layout">
+    <div class="detail-image" aria-label="Detailed image retained under 500KB">
+      <div class="pixel-field" aria-hidden="true">{pixels.map((_,index)=><i class={index%7===0||index%11===0?'accent':undefined}></i>)}</div>
+      <div class="detail-stat"><span>OUTPUT</span><strong>487 KB</strong><small>Q 91 / FULL DIMENSIONS</small></div>
+    </div>
+    <div>
+      <h2 id="fivehundred-detail-title">{content.formatHeading}</h2>
+      <p>{content.formatBody}</p>
+      <ul>{content.formats.map((item)=><li><h3>{item.title}</h3><p>{item.body}</p></li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="fivehundred-format" aria-labelledby="fivehundred-format-title">
+  <div class="container">
+    <div class="format-heading"><h2 id="fivehundred-format-title">{content.reviewHeading}</h2><p>{content.reviewBody}</p></div>
+    <div class="format-lines">
+      <div><strong>JPEG</strong><i><b style="--fill:92%"></b></i><span>detail / compatibility</span></div>
+      <div><strong>WebP</strong><i><b style="--fill:84%"></b></i><span>compare output</span></div>
+      <div><strong>AVIF</strong><i><b style="--fill:78%"></b></i><span>compare output</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="fivehundred-flow" aria-labelledby="fivehundred-flow-title">
+  <div class="container flow-layout">
+    <h2 id="fivehundred-flow-title">{content.workflowHeading}</h2>
+    <ol>{content.workflow.map((step,index)=><li><span>{String(index+1).padStart(2,'0')}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>)}</ol>
+  </div>
+</section>
+
+<section class="fivehundred-small" aria-labelledby="fivehundred-small-title">
+  <div class="container small-layout">
+    <div>
+      <h2 id="fivehundred-small-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+      <div class="small-rules">{content.batchRules.map((item)=><article><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+    </div>
+    <aside><h3>{content.localHeading}</h3><p>{content.localBody}</p><ul>{content.localFacts.map((fact)=><li>{fact}</li>)}</ul></aside>
+  </div>
+</section>
+
+<section class="fivehundred-cta" aria-labelledby="fivehundred-cta-title">
+  <div class="container cta-layout"><div><h2 id="fivehundred-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div><button class="button-primary" data-choose-images type="button">{page.ctaButton}</button></div>
+</section>
+
+<style>
+  .fivehundred-detail,.fivehundred-format,.fivehundred-flow,.fivehundred-small,.fivehundred-cta{padding:80px 0}
+  .detail-layout,.flow-layout,.small-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:72px;align-items:center}
+  .fivehundred-detail p,.fivehundred-format p,.fivehundred-flow p,.fivehundred-small p,.fivehundred-cta p{color:var(--muted)}
+  .detail-image{border:2px solid var(--text)}.pixel-field{display:grid;grid-template-columns:repeat(8,1fr);height:300px;background:var(--surface)}.pixel-field i{border-right:1px solid var(--page);border-bottom:1px solid var(--page);background:color-mix(in srgb,var(--text) 8%,var(--page))}.pixel-field i.accent{background:var(--brand)}.detail-stat{display:grid;grid-template-columns:1fr auto;gap:4px;padding:20px}.detail-stat span{font-size:10px;font-weight:900}.detail-stat strong{grid-row:1/3;grid-column:2;color:var(--brand-text);font-size:26px}.detail-stat small{color:var(--muted)}
+  .fivehundred-detail ul{padding:0;margin:28px 0 0;list-style:none}.fivehundred-detail li{padding:14px 0;border-top:1px solid var(--rule)}.fivehundred-detail h3,.fivehundred-detail li p{margin:0}.fivehundred-detail h3{margin-bottom:7px}
+  .fivehundred-format{background:var(--surface)}.format-heading{max-width:760px}.format-lines{margin-top:42px;border:2px solid var(--text);background:var(--page)}.format-lines>div{display:grid;grid-template-columns:100px 1fr 180px;gap:20px;align-items:center;padding:21px}.format-lines>div+div{border-top:1px solid var(--rule)}.format-lines i{height:10px;background:var(--surface)}.format-lines i b{display:block;width:var(--fill);height:100%;background:var(--brand)}.format-lines span{color:var(--muted);font-size:12px}
+  .flow-layout{align-items:start}.fivehundred-flow ol{padding:0;margin:0;list-style:none}.fivehundred-flow li{display:grid;grid-template-columns:58px 1fr;gap:22px;padding:22px 0;border-top:1px solid var(--rule)}.fivehundred-flow li>span{color:var(--brand-text);font-size:20px;font-weight:900}.fivehundred-flow h3{margin-bottom:8px}
+  .small-layout{align-items:start}.small-rules{display:grid;grid-template-columns:repeat(3,1fr);margin-top:32px;border-top:2px solid var(--text)}.small-rules article{padding:22px 16px}.small-rules article+article{border-left:1px solid var(--rule)}.small-rules h3{font-size:17px}.fivehundred-small aside{padding:32px;border:2px solid var(--text);background:var(--surface)}.fivehundred-small aside ul{padding-left:18px}
+  .fivehundred-cta{border-top:1px solid var(--rule)}.cta-layout{grid-template-columns:1fr auto}.fivehundred-cta p{margin-bottom:0}
+  @media(max-width:760px){.fivehundred-detail,.fivehundred-format,.fivehundred-flow,.fivehundred-small,.fivehundred-cta{padding:64px 0}.detail-layout,.flow-layout,.small-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.pixel-field{height:240px}.format-lines>div{grid-template-columns:80px 1fr}.format-lines span{grid-column:2}.small-rules{grid-template-columns:1fr}.small-rules article+article{border-top:1px solid var(--rule);border-left:0}.cta-layout{justify-items:start}}
+</style>

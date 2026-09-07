@@ -10,6 +10,15 @@
 - [PNG to WebP Converter Online - Free and Private](https://vicoco.uk/app/png-to-webp-converter/): Convert PNG images to WebP locally with quality comparison and batch export.
 - [Image Size Checker Online - File Size and Dimensions](https://vicoco.uk/app/image-size-checker/): Check image file size, pixel dimensions, format, and aspect ratio in an inline local list, then optionally send the list to the batch compressor.
 - [Image Stretcher Online - Resize Width and Height](https://vicoco.uk/app/image-stretcher/): Change image width and height and preview the resized result.
+- [Shopify Image Optimizer - Compress Product Images](https://vicoco.uk/app/shopify-image-optimizer/): Resize, compress and batch export product images locally for a Shopify storefront workflow.
+- [Email Signature Image Optimizer - Resize and Compress](https://vicoco.uk/app/email-signature-image-optimizer/): Prepare a smaller email signature logo or photo with exact pixel dimensions.
+- [Transparent PNG Compressor - Reduce Size, Keep Alpha](https://vicoco.uk/app/transparent-png-compressor/): Reduce PNG palette colours and dimensions while checking alpha transparency.
+- [Image Compressor to 20KB Online - Free and Private](https://vicoco.uk/app/image-compressor-to-20kb/): Reduce an image to a 20KB maximum with quality search and resize fallback.
+- [Compress Image to 50KB Online - Free Image Compressor](https://vicoco.uk/app/image-compressor-to-50kb/): Set a 50KB maximum and inspect actual size, quality and dimensions.
+- [Compress Image to 100KB Online - Free and Private](https://vicoco.uk/app/image-compressor-to-100kb/): Target a 100KB maximum for JPEG, WebP or AVIF output.
+- [Compress Image to 200KB Online - Free Compressor](https://vicoco.uk/app/image-compressor-to-200kb/): Balance quality and dimensions under a 200KB maximum.
+- [Image Compressor to 500KB Online - Free and Private](https://vicoco.uk/app/image-compressor-to-500kb/): Retain the highest tested quality that fits a 500KB maximum.
+- [JPG to JPEG Converter Online - Free and Private](https://vicoco.uk/app/jpg-to-jpeg/): Re-encode JPG files and download single or batch results with the .jpeg extension.
 - [Kompres JPG Online Gratis - Cepat dan Aman](https://vicoco.uk/app/id/kompres-jpg/): Atur kualitas dan dimensi JPG, lalu unduh satu foto atau seluruh antrean.
 - [Kompres PNG Online Gratis - Cepat dan Aman](https://vicoco.uk/app/id/kompres-png/): Kurangi warna PNG, pertahankan transparansi, dan proses banyak file.
 - [Сжать фото онлайн бесплатно — быстро и безопасно](https://vicoco.uk/app/ru/szhat-foto/): Уменьшите размер фото и сравните качество прямо в браузере.

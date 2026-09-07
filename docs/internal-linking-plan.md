@@ -12,10 +12,19 @@
 
 | 页面 | Footer 相关页面 |
 |---|---|
-| `/app/squoosh-batch-image-compressor/` | PNG to WebP、Image Size Checker、Image Stretcher、Kompres Foto |
-| `/app/png-to-webp-converter/` | Squoosh Batch、Image Size Checker、Compresser PNG、PNG Dosya Boyutu Küçültme |
+| `/app/squoosh-batch-image-compressor/` | PNG to WebP、Image Size Checker、Image Stretcher、Shopify Image Optimizer |
+| `/app/png-to-webp-converter/` | Squoosh Batch、Image Size Checker、Compresser PNG、Transparent PNG Compressor |
 | `/app/image-size-checker/` | Squoosh Batch、Image Stretcher、Сжать фото、圖片壓縮 |
-| `/app/image-stretcher/` | Squoosh Batch、Image Size Checker、Redimensionar Imagen Online |
+| `/app/image-stretcher/` | Squoosh Batch、Image Size Checker、Redimensionar Imagen Online、Email Signature Image Optimizer |
+| `/app/shopify-image-optimizer/` | Squoosh Batch、PNG to WebP、Image Size Checker、Transparent PNG Compressor |
+| `/app/email-signature-image-optimizer/` | Image Stretcher、Image Size Checker、Transparent PNG Compressor、Squoosh Batch |
+| `/app/transparent-png-compressor/` | PNG to WebP、Shopify Image Optimizer、Email Signature Image Optimizer、Compresser PNG |
+| `/app/image-compressor-to-20kb/` | Image Compressor to 50KB、Image Compressor to 100KB、Image Size Checker |
+| `/app/image-compressor-to-50kb/` | Image Compressor to 20KB、Image Compressor to 100KB、Squoosh Batch |
+| `/app/image-compressor-to-100kb/` | Image Compressor to 50KB、Image Compressor to 200KB、JPG to JPEG、Squoosh Batch |
+| `/app/image-compressor-to-200kb/` | Image Compressor to 100KB、Image Compressor to 500KB、Image Size Checker |
+| `/app/image-compressor-to-500kb/` | Image Compressor to 200KB、Image Compressor to 100KB、Squoosh Batch |
+| `/app/jpg-to-jpeg/` | Image Compressor to 100KB、Squoosh Batch、Image Size Checker |
 | `/app/id/kompres-foto/` | Kompres JPG、Kompres PNG、Squoosh Batch |
 | `/app/id/kompres-jpg/` | Kompres Foto、Kompres PNG、Nén Ảnh JPG、Comprimi JPG |
 | `/app/id/kompres-png/` | Kompres Foto、Kompres JPG、Nén Ảnh PNG、PNG Dosya Boyutu Küçültme |

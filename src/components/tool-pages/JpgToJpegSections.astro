@@ -1,0 +1,70 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'converter' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="jpeg-same" aria-labelledby="jpeg-same-title">
+  <div class="container same-layout">
+    <div>
+      <h2 id="jpeg-same-title">{content.modesHeading}</h2>
+      <p>{content.modesBody}</p>
+      <dl>{content.modes.map((item)=><div><dt>{item.title}</dt><dd>{item.body}</dd></div>)}</dl>
+    </div>
+    <div class="extension-equation" aria-label="JPG and JPEG extensions">
+      <span>.jpg</span><strong>=</strong><span>.jpeg</span>
+      <small>JPEG IMAGE DATA</small>
+    </div>
+  </div>
+</section>
+
+<section class="jpeg-process" aria-labelledby="jpeg-process-title">
+  <div class="container">
+    <h2 id="jpeg-process-title">{content.conversionHeading}</h2>
+    <ol>{content.conversionSteps.map((step,index)=><li><span>{index===0?'.JPG':index===2?'.JPEG':String(index+1).padStart(2,'0')}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>)}</ol>
+  </div>
+</section>
+
+<section class="jpeg-reencode" aria-labelledby="jpeg-reencode-title">
+  <div class="container reencode-layout">
+    <div class="encode-view" aria-label="JPEG re-encoding comparison">
+      <div><span>INPUT</span><strong>photo.jpg</strong><small>Q 88 / 1.4 MB</small></div>
+      <i aria-hidden="true"></i>
+      <div><span>OUTPUT</span><strong>photo.jpeg</strong><small>Q 82 / 640 KB</small></div>
+    </div>
+    <div><h2 id="jpeg-reencode-title">{content.comparisonHeading}</h2><p>{content.comparisonBody}</p></div>
+  </div>
+</section>
+
+<section class="jpeg-batch" aria-labelledby="jpeg-batch-title">
+  <div class="container batch-layout">
+    <div>
+      <h2 id="jpeg-batch-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+      <ul>{content.batchNotes.map((item)=><li><h3>{item.title}</h3><p>{item.body}</p></li>)}</ul>
+    </div>
+    <aside><h3>{content.localHeading}</h3><p>{content.localBody}</p><ul>{content.localFacts.map((fact)=><li>{fact}</li>)}</ul></aside>
+  </div>
+</section>
+
+<section class="jpeg-cta" aria-labelledby="jpeg-cta-title">
+  <div class="container cta-layout"><div><h2 id="jpeg-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div><button class="button-primary" data-choose-images type="button">{page.ctaButton}</button></div>
+</section>
+
+<style>
+  .jpeg-same,.jpeg-process,.jpeg-reencode,.jpeg-batch,.jpeg-cta{padding:80px 0}
+  .same-layout,.reencode-layout,.batch-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:72px;align-items:center}
+  .jpeg-same p,.jpeg-same dd,.jpeg-process p,.jpeg-reencode p,.jpeg-batch p,.jpeg-cta p{color:var(--muted)}
+  .jpeg-same dl{margin:30px 0 0}.jpeg-same dl>div{display:grid;grid-template-columns:170px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--rule)}.jpeg-same dt{font-weight:850}.jpeg-same dd{margin:0}
+  .extension-equation{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;min-height:320px;padding:36px;border:2px solid var(--text);background:var(--surface)}.extension-equation span{display:grid;height:120px;place-items:center;border:2px solid var(--text);background:var(--page);color:var(--brand-text);font-size:34px;font-weight:900}.extension-equation strong{font-size:34px}.extension-equation small{grid-column:1/-1;text-align:center;font-weight:900}
+  .jpeg-process{background:var(--surface)}.jpeg-process h2{max-width:680px}.jpeg-process ol{display:grid;grid-template-columns:repeat(3,1fr);padding:0;margin:44px 0 0;list-style:none}.jpeg-process li{position:relative;padding:24px;border-top:2px solid var(--text)}.jpeg-process li+li{border-left:1px solid var(--rule)}.jpeg-process li>span{display:inline-block;padding:6px 10px;border:1px solid var(--text);background:var(--page);color:var(--brand-text);font-size:11px;font-weight:900}.jpeg-process h3{margin:28px 0 9px}
+  .encode-view{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;border:2px solid var(--text)}.encode-view>div{display:grid;min-height:220px;align-content:center;padding:26px}.encode-view>div:last-child{background:var(--surface)}.encode-view span{font-size:10px;font-weight:900}.encode-view strong{margin:10px 0;color:var(--brand-text);font-size:21px}.encode-view small{color:var(--muted)}.encode-view>i{position:relative;height:2px;background:var(--text)}.encode-view>i:after{position:absolute;top:-5px;right:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:10px solid var(--text);content:''}
+  .jpeg-batch ul{padding:0;margin:28px 0 0;list-style:none}.jpeg-batch li{display:grid;grid-template-columns:160px 1fr;gap:18px;padding:17px 0;border-top:1px solid var(--rule)}.jpeg-batch li h3,.jpeg-batch li p{margin:0}.jpeg-batch aside{padding:34px;border:2px solid var(--text);box-shadow:10px 10px 0 var(--surface)}.jpeg-batch aside ul{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;padding-left:18px}.jpeg-batch aside li{display:list-item;padding:0;border:0}
+  .jpeg-cta{background:var(--surface)}.cta-layout{grid-template-columns:1fr auto}.jpeg-cta p{margin-bottom:0}
+  @media(max-width:760px){.jpeg-same,.jpeg-process,.jpeg-reencode,.jpeg-batch,.jpeg-cta{padding:64px 0}.same-layout,.reencode-layout,.batch-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.extension-equation{grid-template-columns:1fr;min-height:0}.extension-equation strong{text-align:center}.jpeg-process ol{grid-template-columns:1fr}.jpeg-process li+li{border-left:0}.encode-view{grid-template-columns:1fr}.encode-view>i{width:2px;height:36px;margin:auto}.jpeg-batch li{grid-template-columns:1fr;gap:6px}.cta-layout{justify-items:start}}
+</style>

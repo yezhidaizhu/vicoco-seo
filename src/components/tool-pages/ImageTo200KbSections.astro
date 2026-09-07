@@ -1,0 +1,73 @@
+---
+import type { ToolPageData } from '../../data/toolPages';
+
+interface Props {
+  page: Extract<ToolPageData, { kind: 'general-compressor' }>;
+}
+
+const { page } = Astro.props;
+const { content } = page;
+---
+
+<section class="twohundred-limit" aria-labelledby="twohundred-limit-title">
+  <div class="container limit-layout">
+    <div>
+      <h2 id="twohundred-limit-title">{content.formatHeading}</h2>
+      <p>{content.formatBody}</p>
+      <div class="source-list">{content.formats.map((item) => <article><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+    </div>
+    <div class="balance-board" aria-label="Balance quality and dimensions under 200KB">
+      <div class="balance-scale"><span>QUALITY</span><i></i><span>DIMENSIONS</span></div>
+      <div class="balance-output"><small>CALCULATED OUTPUT</small><strong>196.2 KB</strong><span>Q 82 / 1920 x 1280</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="twohundred-balance" aria-labelledby="twohundred-balance-title">
+  <div class="container balance-layout">
+    <div class="quality-track" aria-hidden="true">
+      <div><span>100</span><i><b></b></i><small>quality search</small></div>
+      <div><span>PX</span><i><b></b></i><small>resize fallback</small></div>
+      <strong>200 KB</strong>
+    </div>
+    <div><h2 id="twohundred-balance-title">{content.reviewHeading}</h2><p>{content.reviewBody}</p></div>
+  </div>
+</section>
+
+<section class="twohundred-checks" aria-labelledby="twohundred-checks-title">
+  <div class="container checks-layout">
+    <h2 id="twohundred-checks-title">{content.workflowHeading}</h2>
+    <ol>{content.workflow.map((step,index)=><li><span>{index+1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>)}</ol>
+  </div>
+</section>
+
+<section class="twohundred-reuse" aria-labelledby="twohundred-reuse-title">
+  <div class="container reuse-layout">
+    <div>
+      <h2 id="twohundred-reuse-title">{content.batchHeading}</h2>
+      <p>{content.batchBody}</p>
+    </div>
+    <div class="reuse-ledger">
+      {content.batchRules.map((item,index)=><div><span>0{index+1}</span><h3>{item.title}</h3><p>{item.body}</p></div>)}
+      <aside><h3>{content.localHeading}</h3><p>{content.localBody}</p><ul>{content.localFacts.map((fact)=><li>{fact}</li>)}</ul></aside>
+    </div>
+  </div>
+</section>
+
+<section class="twohundred-cta" aria-labelledby="twohundred-cta-title">
+  <div class="container cta-layout"><div><h2 id="twohundred-cta-title">{page.ctaHeading}</h2><p>{page.ctaBody}</p></div><button class="button-primary" data-choose-images type="button">{page.ctaButton}</button></div>
+</section>
+
+<style>
+  .twohundred-limit,.twohundred-balance,.twohundred-checks,.twohundred-reuse,.twohundred-cta{padding:80px 0}
+  .limit-layout,.balance-layout,.checks-layout,.reuse-layout,.cta-layout{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:72px;align-items:center}
+  .twohundred-limit p,.twohundred-balance p,.twohundred-checks p,.twohundred-reuse p,.twohundred-cta p{color:var(--muted)}
+  .source-list{margin-top:28px}.source-list article{padding:15px 0;border-top:1px solid var(--rule)}.source-list h3,.source-list p{margin:0}.source-list h3{margin-bottom:7px}
+  .balance-board{border:2px solid var(--text)}.balance-scale{position:relative;min-height:240px;display:grid;grid-template-columns:1fr 1fr;align-items:end;justify-items:center;padding:38px;background:var(--surface)}.balance-scale span{display:grid;width:120px;height:82px;place-items:center;border:2px solid var(--text);background:var(--page);font-size:11px;font-weight:900}.balance-scale span:first-child{transform:translateY(-24px)}.balance-scale i{position:absolute;bottom:67px;width:64%;height:5px;background:var(--text);transform:rotate(-7deg)}.balance-scale i:after{position:absolute;top:4px;left:50%;width:0;height:0;border-right:24px solid transparent;border-bottom:70px solid var(--text);border-left:24px solid transparent;content:'';transform:translateX(-50%)}
+  .balance-output{display:grid;grid-template-columns:1fr auto;gap:5px;padding:22px}.balance-output small{font-size:10px}.balance-output strong{grid-row:1/3;grid-column:2;color:var(--brand-text);font-size:26px}.balance-output span{color:var(--muted)}
+  .twohundred-balance{background:var(--surface)}.quality-track{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:28px;border:2px solid var(--text);background:var(--page)}.quality-track>div{display:grid;gap:8px}.quality-track span{font-weight:900}.quality-track i{height:8px;background:var(--surface)}.quality-track i b{display:block;width:82%;height:100%;background:var(--brand)}.quality-track>div:nth-child(2) i b{width:28%}.quality-track small{color:var(--muted)}.quality-track>strong{grid-column:1/-1;padding-top:20px;border-top:1px solid var(--rule);color:var(--brand-text);font-size:30px;text-align:center}
+  .checks-layout{align-items:start}.twohundred-checks ol{display:grid;grid-template-columns:repeat(3,1fr);padding:0;margin:0;list-style:none;border-top:2px solid var(--text)}.twohundred-checks li{padding:24px}.twohundred-checks li+li{border-left:1px solid var(--rule)}.twohundred-checks li>span{color:var(--brand-text);font-size:26px;font-weight:900}.twohundred-checks h3{margin:30px 0 9px}
+  .reuse-layout{align-items:start}.reuse-ledger{border:2px solid var(--text)}.reuse-ledger>div{display:grid;grid-template-columns:42px 180px 1fr;gap:18px;padding:20px}.reuse-ledger>div+div{border-top:1px solid var(--rule)}.reuse-ledger span{color:var(--brand-text);font-weight:900}.reuse-ledger h3,.reuse-ledger p{margin:0}.reuse-ledger aside{padding:28px;background:var(--surface);border-top:2px solid var(--text)}.reuse-ledger aside ul{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;padding-left:18px}
+  .twohundred-cta{background:var(--surface)}.cta-layout{grid-template-columns:1fr auto}.twohundred-cta p{margin-bottom:0}
+  @media(max-width:760px){.twohundred-limit,.twohundred-balance,.twohundred-checks,.twohundred-reuse,.twohundred-cta{padding:64px 0}.limit-layout,.balance-layout,.checks-layout,.reuse-layout,.cta-layout{grid-template-columns:1fr;gap:40px}.twohundred-checks ol{grid-template-columns:1fr}.twohundred-checks li+li{border-top:1px solid var(--rule);border-left:0}.reuse-ledger>div{grid-template-columns:36px 1fr}.reuse-ledger>div p{grid-column:2}.cta-layout{justify-items:start}}
+</style>
